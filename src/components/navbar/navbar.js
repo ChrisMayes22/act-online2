@@ -42,10 +42,6 @@ class Navbar extends Component {
     }
 
     selectButton(i){
-        console.log('i', i);
-        console.log('buttonArr[i]', this.state.buttonArr[i]);
-        console.log('buttonArr[0]', this.state.buttonArr[0]);
-        console.log('priorSelect', this.state.priorSelect);
         const arr = [...this.state.buttonArr];
         if(this.state.priorSelect || this.state.priorSelect === 0) 
             arr[this.state.priorSelect].selected = false;
