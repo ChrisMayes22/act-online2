@@ -1,0 +1,7 @@
+.footContainer {
+    position: fixed;
+    width: 100%;
+    height: 3rem;
+    background-color: rgb(245, 245, 245);
+    bottom: 0;
+}

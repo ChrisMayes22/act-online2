@@ -1,0 +1,60 @@
+.headContainer {
+    position: fixed;
+    width: 100%;
+    height: 3rem;
+    background-color: #0c2461;
+    top: 0;
+}
+
+.flexContainer {
+    display: inline-flex;
+    padding: 0.7rem 1rem;
+    flex-direction: row;
+}
+
+.flexContainerRow {
+    flex-direction: row-reverse;
+    position: absolute;
+    right: -1vw;
+}
+
+.navButton {
+    padding: 0.5rem;
+    font-size: 0.5rem;
+    font-weight: bold;
+    height: 1.5rem;
+    border: none;
+    margin: 0 0.3rem;
+    border-radius: 12%;
+    background-color: #FDFDFD;
+}
+
+.navButton:hover {
+    cursor: pointer;
+}
+
+/*
+
+$light-yellow: #fad390;
+$yellow: #f6b93b;
+$dark-yellow: #fa983a;
+$soaked-yellow: #e58e26;
+$light-red: #f8c291;
+$red: #e55039;
+$dark-red: #eb2f06;
+$soaked-red: #b71540;
+$light-navy-blue: #6a89cc;
+$navy-blue: #4a69bd;
+$dark-navy-blue: #1e3799;
+$soaked-navy-blue: #0c2461;
+$light-blue: #82ccdd;
+$dark-blue: #60a3bc;
+$dark-blue: #3c6382;
+$soaked-blue: #0a3d62;
+$light-green: #b8e994;
+$green: #78e08f;
+$dark-green: #38ada9;
+$soaked-green: #079992;
+$white: #FDFDFD;
+
+*/
