@@ -12,10 +12,60 @@
     padding: 1px;
 }
 
-.selected {
+.navbarButton:hover {
     color: #6a89cc;
     border: solid 1px #6a89cc;
     background-color: #0c2461;
+    cursor: pointer;
+}
+
+.navbarButton:active {
+    color: #FDFDFD;
+    border: solid 1px #FDFDFD;
+    background-color: #6a89cc;
+    cursor: pointer;
+}
+
+.flagButton{
+    height: 2rem;
+    width: 3rem;
+    font-size: 0.5rem;
+    font-weight: bold;
+    margin: 0;
+    border: solid gray 0.5px;
+    color: rgb(170, 170, 170);
+    padding: 1px;
+}
+
+.flagButton:hover {
+    color: #f8c291;
+    border: solid 1px #f8c291;
+    background-color: #b71540;
+    cursor: pointer;
+}
+
+.flagButton:active {
+    color: #FDFDFD;
+    border: solid 1px #FDFDFD;
+    background-color: #f8c291;
+    cursor: pointer;
+}
+
+.selected {
+    height: 1.4rem;
+    width: 1.4rem;
+    color: #6a89cc;
+    background-color: #0c2461;
+    cursor: pointer;
+}
+
+.flagged {
+    color: #f8c291;
+    border-left: solid gray 0.5px;
+    border-top: solid gray 0.5px;
+    border-bottom: solid gray 0.5px;
+    border-right: none;
+    background-color: #b71540;
     cursor: pointer;
 }
 
@@ -37,16 +87,3 @@
     background-color: rgb(190, 190, 190);
 }
 
-.navbarButton:hover {
-    color: #6a89cc;
-    border: solid 1px #6a89cc;
-    background-color: #0c2461;
-    cursor: pointer;
-}
-
-.navbarButton:active {
-    color: #FDFDFD;
-    border: solid 1px #FDFDFD;
-    background-color: #6a89cc;
-    cursor: pointer;
-}

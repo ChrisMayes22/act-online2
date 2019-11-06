@@ -3,5 +3,15 @@
   display: flex;
   max-height: 100vh;
   width: 100%;
-  min-height: 91vh;
+  min-height: 82vh;
+}
+
+.textContainer {
+  min-width: 50vw;
+  background-color: blue;
+}
+
+.answersContainer {
+  min-width: 50vw;
+  background-color: green;
 }

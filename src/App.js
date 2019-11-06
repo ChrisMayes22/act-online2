@@ -10,10 +10,10 @@ function App() {
     <div className={classes.background}>
       <MainHeader/>
       <div className={classes.bodyFlex}>
-        <div>
-          Hello World
+        <div className={classes.textContainer}>
+          Hello World! How are you?
         </div>
-        <div>
+        <div className={classes.answersContainer}>
           Hello World
         </div>
       </div>
