@@ -9,6 +9,14 @@ function App() {
   return (
     <div className={classes.background}>
       <MainHeader/>
+      <div className={classes.bodyFlex}>
+        <div>
+          Hello World
+        </div>
+        <div>
+          Hello World
+        </div>
+      </div>
       <MainFooter/>
     </div>
   );

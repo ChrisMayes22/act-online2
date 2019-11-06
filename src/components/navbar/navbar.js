@@ -4,7 +4,7 @@ import classes from './navbar.css';
 class Navbar extends Component {
 
     state = {
-        buttonArr: new Array(40).fill(0).map((el, i) => el = {id: i+1, selected: false}),
+        questionArr: new Array(75).fill(0).map((el, i) => el = {id: i+1, selected: false}),
         start: 0,
         end: 40,
         max: 75,
@@ -12,14 +12,9 @@ class Navbar extends Component {
     }
 
     rightShift() {
-        let buttonArr = [];
         let end = this.state.end + 20 > this.state.max ? this.state.max : this.state.end + 20;
         let start = end - 40;
-        for(let i = start; i < end; i++){
-            buttonArr.push({id: i+1, selected: false})
-        }
         const newState = {
-            buttonArr,
             start,
             end
         }
@@ -27,14 +22,9 @@ class Navbar extends Component {
     }
 
     leftShift() {
-        let buttonArr = [];
-        let start = this.state.start - 20 < 0 ? 0 : this.state.start -20;
+        let start = this.state.start - 20 < 0 ? 0 : this.state.start - 20;
         let end = start + 40;
-        for(let i = start; i < end; i++){
-            buttonArr.push({id: i+1, selected: false})
-        }
         const newState = {
-            buttonArr,
             start,
             end
         }
@@ -42,13 +32,13 @@ class Navbar extends Component {
     }
 
     selectButton(i){
-        const arr = [...this.state.buttonArr];
+        const arr = [...this.state.questionArr];
         if(this.state.priorSelect || this.state.priorSelect === 0) 
             arr[this.state.priorSelect].selected = false;
         arr[i].selected = true;
         const newState = {
             ...this.state,
-            buttonArr: arr,
+            questionArr: arr,
             priorSelect: i
         }
         this.setState({...newState})
@@ -63,11 +53,11 @@ class Navbar extends Component {
                 onClick = {() => this.leftShift()}/>
             <button className = {[classes.navbarButton, classes.grayButton].join(' ')} children='instr'/>
                 {
-                    this.state.buttonArr.map((el, i) => {
+                    this.state.questionArr.slice(this.state.start, this.state.end).map((el, i) => {
                         return <button 
                                 className = {[classes.navbarButton, el.selected ? classes.selected : ''].join(' ')} 
-                                children={this.state.buttonArr[i].id}
-                                key={`navbarButton${this.state.buttonArr[i].id}`}
+                                children={el.id}
+                                key={`navbarButton${this.state.questionArr[i].id}`}
                                 onClick = {() => this.selectButton(i)}
                                 />
                     })
