@@ -1,0 +1,12 @@
+input {
+    vertical-align: middle;
+}
+
+label {
+    margin: 0.25rem;
+}
+
+.inputBox {
+    font-size: 0.5rem;
+    margin: 0.5rem;
+}

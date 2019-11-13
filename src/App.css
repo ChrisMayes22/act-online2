@@ -27,23 +27,3 @@
   margin: 0.55rem;
   font-size: 0.5rem;
 }
-
-li{
-  margin: 0.55rem 1.5rem;
-}
-
-.sectionTitle {
-  font-size: 0.55rem;
-  font-style: italic;
-  margin: 0.55rem;
-}
-
-.figureTitle{
-  font-size: 0.55rem;
-  margin: 0 0.55rem 1rem 0;
-}
-
-.figure {
-  max-width: 30vw;
-  margin: 0 1rem;
-}

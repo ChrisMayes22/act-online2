@@ -1,0 +1,27 @@
+li{
+    margin: 0.55rem 1.5rem;
+}
+
+.sectionTitle {
+font-size: 0.55rem;
+font-style: italic;
+margin: 0.55rem;
+}
+
+.figureLabel{
+font-size: 0.55rem;
+margin: 0 0.55rem 1rem 0.55rem;
+}
+
+.figure {
+max-width: 30vw;
+margin: 0 1rem;
+}
+
+.passageTitle {
+font-family: 'Open Sans', sans-serif;
+margin: 0.5rem 0.55rem;
+text-transform: uppercase;
+font-weight: bold;
+font-size: 0.6rem;
+}
