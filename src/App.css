@@ -1,17 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
 .bodyFlex{
-  background-color: red;
   display: flex;
-  max-height: 100vh;
-  width: 100%;
+  max-height: 82vh;
   min-height: 82vh;
+  width: 100%;
 }
 
-.textContainer {
+.contentContainer {
+  max-height: 82vh;
+  overflow-y: scroll;
+  overflow-x: scroll;
   min-width: 50vw;
-  background-color: blue;
+  max-width: 50vw;
 }
 
-.answersContainer {
-  min-width: 50vw;
-  background-color: green;
+.passageTitle {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0.5rem 0.55rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.6rem;
+}
+
+.contentContainer > p, li {
+  margin: 0.55rem;
+  font-size: 0.5rem;
+}
+
+li{
+  margin: 0.55rem 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 0.55rem;
+  font-style: italic;
+  margin: 0.55rem;
+}
+
+.figureTitle{
+  font-size: 0.55rem;
+  margin: 0 0.55rem 1rem 0;
+}
+
+.figure {
+  max-width: 30vw;
+  margin: 0 1rem;
 }
