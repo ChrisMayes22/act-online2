@@ -5,8 +5,18 @@ const mainHeader = (props) => {
     return(
         <div className = {classes.headContainer}>
             <div className = {classes.flexContainer}>
-                <button className = {classes.navButton} onClick = {props.previousQuestion}>Prev</button>
-                <button className = {classes.navButton} onClick = {props.nextQuestion}>Next</button>
+                <button 
+                    className = {classes.navButton} 
+                    onClick = {props.prevQuestion}
+                    disabled={props.prevDisabled}
+                    children='Prev'
+                />
+                <button 
+                    className = {classes.navButton} 
+                    onClick = {props.nextQuestion}
+                    disabled={props.nextDisabled}
+                    children='Next'
+                />
             </div>
             <span className = {classes.questionNumber} children={`Question #${props.questionNumber}`}/>
             <div className = {[classes.flexContainer, classes.flexContainerRow].join(' ')}>

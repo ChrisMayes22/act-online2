@@ -51,6 +51,15 @@
     cursor: pointer;
 }
 
+.answered{
+    border-left: solid rgb(110, 110, 110) 0.5px;
+    border-top: solid rgb(110, 110, 110) 0.5px;
+    border-bottom: solid rgb(110, 110, 110) 0.5px;
+    border-right: none;
+    background-color: rgb(170, 170, 170);
+    color: rgb(110, 110, 110);
+}
+
 .selected {
     height: 1.4rem;
     width: 1.4rem;

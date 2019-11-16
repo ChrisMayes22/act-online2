@@ -1,0 +1,1 @@
+export const QUESTIONS_VIEW = '/questions-view';

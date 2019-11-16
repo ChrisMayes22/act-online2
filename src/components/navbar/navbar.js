@@ -9,9 +9,10 @@ const navbar = (props) => {
             {props.questionArr.slice(props.start, props.end).map((el, i) => {
                 return <button 
                         className = {[
-                        classes.navbarButton, 
-                        el.selected ? classes.selected : '',
-                        el.flagged ? classes.flagged : '',
+                            classes.navbarButton, 
+                            el.selected ? classes.selected : '',
+                            el.flagged ? classes.flagged : '',
+                            el.answered ? classes.answered : '',
                         ].join(' ')} 
                         children={el.id}
                         key={`navbarButton${props.questionArr[i].id}`}
