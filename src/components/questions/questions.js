@@ -16,6 +16,7 @@ class Question {
         this.id = id;
         this.flagged = false;
         this.selected = false;
+        this.answered = false;
         this.passage = passage;
         this.content = {
             prompt,
@@ -25,7 +26,7 @@ class Question {
             D,
             E: E || null
         };
-        this.studentResponse = null
+        this.studentResponse = null;
     }
 }
 
@@ -53,10 +54,10 @@ const questionsArray = [
         2,
         <PassageOne/>,
         `Which of the following diagrams best shows how pressure was applied to a cylinder to determine its CS ?`,
-        <span>A.<img className={classes.answerImage} src={question2ImageUrlA}/></span>,
-        <span>B.<img className={classes.answerImage} src={question2ImageUrlB}/></span>,
-        <span>C.<img className={classes.answerImage} src={question2ImageUrlC}/></span>,
-        <span>D.<img className={classes.answerImage} src={question2ImageUrlD}/></span>,
+        <span>A.<img className={classes.answerImage} src={question2ImageUrlA} alt="cylinder diagram"/></span>,
+        <span>B.<img className={classes.answerImage} src={question2ImageUrlB} alt="cylinder diagram"/></span>,
+        <span>C.<img className={classes.answerImage} src={question2ImageUrlC} alt="cylinder diagram"/></span>,
+        <span>D.<img className={classes.answerImage} src={question2ImageUrlD} alt="cylinder diagram"/></span>,
     ),
     new Question(
         3,
@@ -103,10 +104,10 @@ const questionsArray = [
         <PassageTwo/>,
         `The data in Figure 2 for time = 140 days are best shown 
         by which of the following graphs?`,
-        <span>A.<img className={classes.answerImage} src={question7ImageUrlA}/></span>,
-        <span>B.<img className={classes.answerImage} src={question7ImageUrlB}/></span>,
-        <span>C.<img className={classes.answerImage} src={question7ImageUrlC}/></span>,
-        <span>D.<img className={classes.answerImage} src={question7ImageUrlD}/></span>
+        <span>A.<img className={classes.answerImage} src={question7ImageUrlA} alt="graph"/></span>,
+        <span>B.<img className={classes.answerImage} src={question7ImageUrlB} alt="graph"/></span>,
+        <span>C.<img className={classes.answerImage} src={question7ImageUrlC} alt="graph"/></span>,
+        <span>D.<img className={classes.answerImage} src={question7ImageUrlD} alt="graph"/></span>
     ), 
     new Question(
         8,

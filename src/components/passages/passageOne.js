@@ -38,9 +38,9 @@ const passageOne = () => {
             <p>
               All of the above procedures were repeated for the other deicers (see Figures 1 and 2).
             </p>
-            <img src={figureOne} className={classes.figure} />
+            <img src={figureOne} className={classes.figure} alt="figure 1"/>
             <div className={classes.figureLabel}>Figure 1</div>
-            <img src={figureTwo} className={classes.figure}/>
+            <img src={figureTwo} className={classes.figure} alt="figure 2"/>
             <div className={classes.figureLabel}>Figure 2</div>
             <div className={classes.sectionTitle}>Study 2</div>
             <p>
@@ -56,7 +56,7 @@ const passageOne = () => {
               All of the above procedures were repeated for the other deicers. Finally, the CS of 5 more of the cylinders—cylinders 
               that had not been submerged in any deicer—was determined, and their average CS was calculated (see Figure 3).
             </p>
-            <img src={figureThree} className={classes.figure}/>
+            <img src={figureThree} className={classes.figure} alt="figure 3"/>
             <div className={classes.figureLabel}>Figure 3</div>
         </React.Fragment>
     )

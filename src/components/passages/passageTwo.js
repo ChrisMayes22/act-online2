@@ -3,14 +3,17 @@ import classes from './passages.css';
 import figureOneUrl from '../../assets/p2fig1.png';
 import figureTwoUrl from '../../assets/p2fig2.png';
 
-const passageTwo = (props) => {
+const passageTwo = () => {
     return(
         <React.Fragment>
             <div className={classes.passageTitle}>Passage 2</div>
             <p>
                 When the nucleus of an atom of a radioactive isotope undergoes 
                 certain types of decay, the atom transforms into an atom of a 
-                different isotope. An isotope’s 
+                different isotope. An isotope’s <em>half-life</em>  is the time 
+                it takes for half of any given number of its nuclei to decay. An isotope’s  
+                <em>decay constant</em>, λ, depends on the isotope’s rate of decay. Table 1
+                gives the value of λ (in yr<sup>-1</sup>) for 8 isotopes of different elements.
             </p>
             <table>
                 <tr>
@@ -68,9 +71,9 @@ const passageTwo = (props) => {
                 (Note: in Figure 1, the unit of time is <em>years</em>; in Figure 2,
                 the unit of time is <em>days</em>.)
             </p>
-            <img src={figureOneUrl} className={classes.figure}/>
+            <img src={figureOneUrl} className={classes.figure} alt="figure 1"/>
             <p className={classes.figureLabel}>Figure 1</p>
-            <img src={figureTwoUrl} className={classes.figure}/>
+            <img src={figureTwoUrl} className={classes.figure} alt="figure 2"/>
             <p className={classes.figureLabel}>FIgure 2</p>
         </React.Fragment>
     )

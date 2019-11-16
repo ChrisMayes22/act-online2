@@ -6,20 +6,40 @@ const answerInput = (props) => {
         <React.Fragment>
             <p children={props.prompt}/> 
             <div className={classes.inputBox}>
-                <input type='radio' id="A"  name="q1 Answer"/>
-                <label for="A" children={props.A} />
+                <input type='radio' 
+                    id={`A${props.answerIndex}`}  
+                    name={props.answerIndex} 
+                    checked={props.studentResponse === 'A'}
+                    onChange={() => props.change('A')}
+                />
+                <label htmlFor="A" children={props.A} />
             </div>
             <div className={classes.inputBox}>
-                <input type='radio' id="B" name="q1 Answer"/>
-                <label for="B" children={props.B}/>
+                <input type='radio' 
+                    id={`B${props.answerIndex}`}  
+                    name={props.answerIndex} 
+                    checked={props.studentResponse === 'B'}
+                    onChange={() => props.change('B')}
+                />
+                <label htmlFor="B" children={props.B}/>
             </div>
             <div className={classes.inputBox}>
-                <input type='radio' id="C" name="q1 Answer"/>
-                <label for="C" children={props.C} />
+                <input type='radio' 
+                    id={`C${props.answerIndex}`}  
+                    name={props.answerIndex} 
+                    checked={props.studentResponse === 'C'}
+                    onChange={() => props.change('C')}
+                />
+                <label htmlFor="C" children={props.C} />
             </div>
             <div className={classes.inputBox}>
-                <input type='radio' id="D" name="q1 Answer"/>
-                <label for="D" children={props.D} />
+                <input type='radio' 
+                    id={`D${props.answerIndex}`}  
+                    name={props.answerIndex} 
+                    checked={props.studentResponse === 'D'}
+                    onChange={() => props.change('D')}
+                />
+                <label htmlFor="D" children={props.D} />
             </div>
         </React.Fragment>
     )

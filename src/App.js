@@ -3,7 +3,7 @@ import './App.css';
 import classes from './App.css';
 import MainHeader from './components/mainHeader/mainHeader';
 import MainFooter from './components/mainFooter/mainFooter';
-import questionsArray from './components/questions/questions';
+import questionsArr from './components/questions/questions';
 import AnswerInputs from './components/answerInputs/answerInputs';
 
 
@@ -12,13 +12,15 @@ class App extends Component {
     super(props)
 
     this.selectButton = this.selectButton.bind(this);
+    this.storeAnswerHandler = this.storeAnswerHandler.bind(this);
   }
   state = {
-    questionArr: questionsArray,
+    questionArr: questionsArr,
     //Note: question id MUST remain integer corresponding to its index +1!! Consider adding a check for this in future. 
     start: 0,
     end: 40,
-    activeIndex: 0
+    activeIndex: 0,
+    answers:[]
   }
 
   rightShift() {
@@ -80,6 +82,12 @@ class App extends Component {
     return null;
   }
 
+  storeAnswerHandler(response) {
+    const answers = [...this.state.answers];
+    answers[this.state.activeIndex] = response;
+    this.setState({ answers })
+  }
+
   render() {
     return (
       <div className={classes.background}>
@@ -99,6 +107,9 @@ class App extends Component {
               B = {this.state.questionArr[this.state.activeIndex].content.B}
               C = {this.state.questionArr[this.state.activeIndex].content.C}
               D = {this.state.questionArr[this.state.activeIndex].content.D}
+              studentResponse = {this.state.answers[this.state.activeIndex]}
+              answerIndex={`question#${this.state.activeIndex}`}
+              change = {this.storeAnswerHandler}
             />
           </div>
         </div>
