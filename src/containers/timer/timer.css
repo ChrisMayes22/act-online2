@@ -1,0 +1,12 @@
+.timer {
+    min-width:10vw;
+    padding: 0.5rem;
+    font-size: 0.5rem;
+    font-weight: bold;
+    height: 1.5rem;
+    border: none;
+    margin: 0 0.3rem;
+    background-color:#FDFDFD;
+    text-align: center;
+    letter-spacing: 0.2rem;
+  }

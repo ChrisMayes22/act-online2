@@ -15,7 +15,7 @@ class Question {
     constructor(id, passage, prompt, A, B, C, D, E){
         this.id = id;
         this.flagged = false;
-        this.selected = false;
+        this.selected = id===1;
         this.answered = false;
         this.passage = passage;
         this.content = {

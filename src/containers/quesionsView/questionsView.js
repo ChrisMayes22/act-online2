@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import classes from './questionsView.css';
-import MainHeader from '../components/mainHeader/mainHeader';
-import MainFooter from '../components/mainFooter/mainFooter';
-import questionsArr from '../components/questions/questions';
-import AnswerInputs from '../components/answerInputs/answerInputs';
-
+import MainHeader from '../../components/mainHeader/mainHeader';
+import MainFooter from '../../components/mainFooter/mainFooter';
+import questionsArr from '../../components/questions/questions';
+import AnswerInputs from '../../components/answerInputs/answerInputs';
+import Timer from '../timer/timer';
 
 class QuestionView extends Component {
   constructor(props) {
@@ -13,13 +13,14 @@ class QuestionView extends Component {
     this.selectQuestionHandler = this.selectQuestionHandler.bind(this);
     this.storeAnswerHandler = this.storeAnswerHandler.bind(this);
   }
+
   state = {
     questionArr: questionsArr,
     //Note: question id MUST remain integer corresponding to its index +1!! Consider adding a check for this in future. 
     start: 0,
     end: 40,
     activeIndex: 0,
-    answers: new Array(questionsArr.length)
+    answers: new Array(questionsArr.length),
   }
 
   rightShift() {
@@ -85,7 +86,10 @@ class QuestionView extends Component {
           nextQuestion = {() => this.selectQuestionHandler(this.state.activeIndex + 1)}
           prevDisabled = {!this.state.activeIndex}
           nextDisabled = {this.state.activeIndex === this.state.questionArr.length - 1}
-        />
+          testActive = {true}
+        >
+          <Timer/>
+        </MainHeader>
         <div className={classes.bodyFlex}>
           <div className={classes.contentContainer}>
             {this.state.questionArr[this.state.activeIndex].passage} 
