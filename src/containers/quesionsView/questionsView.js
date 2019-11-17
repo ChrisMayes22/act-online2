@@ -15,7 +15,7 @@ class QuestionView extends Component {
   }
 
   state = {
-    questionArr: questionsArr,
+    questionsArr: questionsArr,
     //Note: question id MUST remain integer corresponding to its index +1!! Consider adding a check for this in future. 
     start: 0,
     end: 40,
@@ -23,36 +23,16 @@ class QuestionView extends Component {
     answers: new Array(questionsArr.length),
   }
 
-  rightShift() {
-    let max = this.state.questionArr.length;
-    let end = this.state.end + 20 > max ? max : this.state.end + 20;
-    let start = end - 40;
-    const newState = {
-        start,
-        end
-    }
-    this.setState({...newState});
-  }
-
-  leftShift() {
-      let start = this.state.start - 20 < 0 ? 0 : this.state.start - 20;
-      let end = start + 40;
-      const newState = {
-          start,
-          end
-      }
-      this.setState({...newState});
-  }
 
   selectQuestionHandler(i){
-    if(i >= this.state.questionArr.length || i < 0){
-      console.log(`Warning: index ${i} called, but max index is ${this.state.questionArr.length-1} and min index is 0. Input ignored.`)
+    if(i >= this.state.questionsArr.length || i < 0){
+      console.log(`Warning: index ${i} called, but max index is ${this.state.questionsArr.length-1} and min index is 0. Input ignored.`)
       return null;
     }
-    const arr = [...this.state.questionArr];
+    const arr = [...this.state.questionsArr];
     arr[this.state.activeIndex].selected = false;
     arr[i].selected = true;
-    this.setState({questionArr: arr, activeIndex: i})
+    this.setState({questionsArr: arr, activeIndex: i})
   }
 
   flagHandler(){
@@ -60,18 +40,18 @@ class QuestionView extends Component {
       console.log('Warning: user attempted to flag question, but a question is not selected. Input ignored.') 
       return null;
     }
-    let arr = [...this.state.questionArr];
+    let arr = [...this.state.questionsArr];
     arr[this.state.activeIndex].flagged = !arr[this.state.activeIndex].flagged;
-    this.setState({ questionArr: arr });
+    this.setState({ questionsArr: arr });
   }
 
   storeAnswerHandler(response) {
     const answers = [...this.state.answers];
     answers[this.state.activeIndex] = response;
-    if(!this.state.questionArr[this.state.activeIndex].answered){
-      const questionArr = this.state.questionArr;
-      questionArr[this.state.activeIndex].answered = true;
-      this.setState({ answers, questionArr })
+    if(!this.state.questionsArr[this.state.activeIndex].answered){
+      const questionsArr = this.state.questionsArr;
+      questionsArr[this.state.activeIndex].answered = true;
+      this.setState({ answers, questionsArr })
     } else {
       this.setState({ answers })
     }
@@ -81,26 +61,26 @@ class QuestionView extends Component {
     return (
       <div className={classes.background}>
         <MainHeader 
-          questionNumber = {this.state.activeIndex ? this.state.questionArr[this.state.activeIndex].id : 1} 
+          questionNumber = {this.state.activeIndex ? this.state.questionsArr[this.state.activeIndex].id : 1} 
           prevQuestion = {() => this.selectQuestionHandler(this.state.activeIndex - 1)}
           nextQuestion = {() => this.selectQuestionHandler(this.state.activeIndex + 1)}
           prevDisabled = {!this.state.activeIndex}
-          nextDisabled = {this.state.activeIndex === this.state.questionArr.length - 1}
+          nextDisabled = {this.state.activeIndex === this.state.questionsArr.length - 1}
           testActive = {true}
         >
           <Timer/>
         </MainHeader>
         <div className={classes.bodyFlex}>
           <div className={classes.contentContainer}>
-            {this.state.questionArr[this.state.activeIndex].passage} 
+            {this.state.questionsArr[this.state.activeIndex].passage} 
           </div>
           <div className={classes.contentContainer}>
             <AnswerInputs 
-              prompt = {this.state.questionArr[this.state.activeIndex].content.prompt}
-              A = {this.state.questionArr[this.state.activeIndex].content.A}
-              B = {this.state.questionArr[this.state.activeIndex].content.B}
-              C = {this.state.questionArr[this.state.activeIndex].content.C}
-              D = {this.state.questionArr[this.state.activeIndex].content.D}
+              prompt = {this.state.questionsArr[this.state.activeIndex].content.prompt}
+              A = {this.state.questionsArr[this.state.activeIndex].content.A}
+              B = {this.state.questionsArr[this.state.activeIndex].content.B}
+              C = {this.state.questionsArr[this.state.activeIndex].content.C}
+              D = {this.state.questionsArr[this.state.activeIndex].content.D}
               studentResponse = {this.state.answers[this.state.activeIndex]}
               answerIndex={`question#${this.state.activeIndex}`}
               change = {this.storeAnswerHandler}
@@ -108,13 +88,11 @@ class QuestionView extends Component {
           </div>
         </div>
         <MainFooter
-          leftShift={() => this.leftShift()}
-          rightShift={() => this.rightShift()} 
           selectButton={this.selectQuestionHandler}
           flagButton={() => this.flagHandler()}
           start={this.state.start }
           end={this.state.end }
-          questionArr={this.state.questionArr}
+          questionsArr={this.state.questionsArr}
         />
         
       </div>
