@@ -5,6 +5,8 @@ import MainFooter from '../../components/mainFooter/mainFooter';
 import questionsArr from '../../components/questions/questions';
 import AnswerInputs from '../../components/answerInputs/answerInputs';
 import Timer from '../timer/timer';
+import { recordStudentRes } from '../../actions/actions';
+import { connect } from 'react-redux';
 
 class QuestionView extends Component {
   constructor(props) {
@@ -20,7 +22,7 @@ class QuestionView extends Component {
     start: 0,
     end: 40,
     activeIndex: 0,
-    answers: new Array(questionsArr.length),
+    studentRes: new Array(questionsArr.length),
   }
 
 
@@ -46,14 +48,14 @@ class QuestionView extends Component {
   }
 
   storeAnswerHandler(response) {
-    const answers = [...this.state.answers];
-    answers[this.state.activeIndex] = response;
+    const studentRes = [...this.state.studentRes];
+    studentRes[this.state.activeIndex] = response;
     if(!this.state.questionsArr[this.state.activeIndex].answered){
       const questionsArr = this.state.questionsArr;
       questionsArr[this.state.activeIndex].answered = true;
-      this.setState({ answers, questionsArr })
+      this.setState({ studentRes, questionsArr })
     } else {
-      this.setState({ answers })
+      this.setState({ studentRes })
     }
   }
 
@@ -67,6 +69,7 @@ class QuestionView extends Component {
           prevDisabled = {!this.state.activeIndex}
           nextDisabled = {this.state.activeIndex === this.state.questionsArr.length - 1}
           testActive = {true}
+          endTest = {() => this.props.onRecordStudentRes(this.state.studentRes)}
         >
           <Timer/>
         </MainHeader>
@@ -81,7 +84,7 @@ class QuestionView extends Component {
               B = {this.state.questionsArr[this.state.activeIndex].content.B}
               C = {this.state.questionsArr[this.state.activeIndex].content.C}
               D = {this.state.questionsArr[this.state.activeIndex].content.D}
-              studentResponse = {this.state.answers[this.state.activeIndex]}
+              studentResponse = {this.state.studentRes[this.state.activeIndex]}
               answerIndex={`question#${this.state.activeIndex}`}
               change = {this.storeAnswerHandler}
             />
@@ -100,4 +103,10 @@ class QuestionView extends Component {
   }
 }
 
-export default QuestionView;
+const mapDispatchToProps = dispatch => {
+  return {
+      onRecordStudentRes: (arr) => dispatch(recordStudentRes(arr))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(QuestionView);

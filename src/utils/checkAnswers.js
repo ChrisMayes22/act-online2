@@ -1,6 +1,4 @@
-import scoreScale from '../data/scoreScales';
-
-function checkAnswers(studentRes, correctAns) {
+function checkAnswers(studentRes, correctAns, scoreScale) {
     if(typeof(studentRes) !== "object" || typeof(correctAns) !== "object"){
         throw new Error('Invalid checkAnswers input: both student response and answer key must be objects');
     }

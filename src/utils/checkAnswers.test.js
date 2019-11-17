@@ -6,12 +6,12 @@ describe('checkAnswers function behaves as expected', function(){
 
     function makeNextIndexFalse(arr, i) {
         arr[i] = false;
-        return checkAnswers(arr, answers);
+        return checkAnswers(arr, answers, scoreScale);
     }
 
     describe('numCorrect prop on returned object is as expected', function(){
         test('When checkAnswers is called on array identical to answers array, returned object\'s numCorrect prop is answers.length', function(){
-            const scorePkg = checkAnswers([...answers], answers)
+            const scorePkg = checkAnswers([...answers], answers, scoreScale)
             expect(scorePkg.numCorrect).toBe(answers.length);
         });
         test('When checkAnswer is called on an array with n misses, returned object has numCorrect prop set to answers.length - n', function(){
@@ -29,7 +29,7 @@ describe('checkAnswers function behaves as expected', function(){
             }
             const oneWrong = [...answers];
             oneWrong[9] = false;
-            const oneWrongPkg = checkAnswers(oneWrong, answers);
+            const oneWrongPkg = checkAnswers(oneWrong, answers, scoreScale);
             expect(oneWrongPkg.missedQuestions[0]).toBe('#10')
         })
     });

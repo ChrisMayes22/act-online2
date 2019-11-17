@@ -34,7 +34,9 @@ const mainHeader = (props) => {
             <div className = {[classes.flexContainer, classes.flexContainerRow].join(' ')}>
                 <button className = {classes.navButton}>Tools</button>
                 <button className = {classes.navButton}>Clear Highlight</button>
-                <button className = {classes.navButton}>End Section</button>
+                <Link to={urls.FEEDBACK_VIEW} onClick={props.endTest}>
+                    <button className = {classes.navButton} >End Section</button>
+                </Link>
                 {props.children}
             </div>
         </div>
