@@ -16,51 +16,58 @@ const passageTwo = () => {
                 gives the value of λ (in yr<sup>-1</sup>) for 8 isotopes of different elements.
             </p>
             <table>
-                <tr>
-                    <th>Element</th>
-                    <th>Isotope</th>
-                    <th>λ (yr<sup>-1</sup>)</th>
-                </tr>
-                <tr>
-                    <td>Nickel</td>
-                    <td>Ni-63</td>
-                    <td>0.0069</td>
-                </tr>
-                <tr>
-                    <td>Titanium</td>
-                    <td>Ti-44</td>
-                    <td>0.010</td>
-                </tr>
-                <tr>
-                    <td>Strontium</td>
-                    <td>Sr-90</td>
-                    <td>0.024</td>
-                </tr>
-                <tr>
-                    <td>Hydrogen</td>
-                    <td>H-3</td>
-                    <td>0.056</td>
-                </tr>
-                <tr>
-                    <td>Sulfur</td>
-                    <td>S-35</td>
-                    <td>2.9</td>
-                </tr>
-                <tr>
-                    <td>Iron</td>
-                    <td>Fe-59</td>
-                    <td>5.7</td>
-                </tr>
-                <tr>
-                    <td>Phosphorous</td>
-                    <td>P-32</td>
-                    <td>18</td>
-                </tr>
-                <tr>
-                    <td>Iodine</td>
-                    <td>P-32</td>
-                    <td>I-131</td>
-                </tr>
+                <caption>
+                    Table 1
+                </caption>
+                <thead>
+                    <tr>
+                        <th>Element</th>
+                        <th>Isotope</th>
+                        <th>λ (yr<sup>-1</sup>)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nickel</td>
+                        <td>Ni-63</td>
+                        <td>0.0069</td>
+                    </tr>
+                    <tr>
+                        <td>Titanium</td>
+                        <td>Ti-44</td>
+                        <td>0.010</td>
+                    </tr>
+                    <tr>
+                        <td>Strontium</td>
+                        <td>Sr-90</td>
+                        <td>0.024</td>
+                    </tr>
+                    <tr>
+                        <td>Hydrogen</td>
+                        <td>H-3</td>
+                        <td>0.056</td>
+                    </tr>
+                    <tr>
+                        <td>Sulfur</td>
+                        <td>S-35</td>
+                        <td>2.9</td>
+                    </tr>
+                    <tr>
+                        <td>Iron</td>
+                        <td>Fe-59</td>
+                        <td>5.7</td>
+                    </tr>
+                    <tr>
+                        <td>Phosphorous</td>
+                        <td>P-32</td>
+                        <td>18</td>
+                    </tr>
+                    <tr>
+                        <td>Iodine</td>
+                        <td>P-32</td>
+                        <td>I-131</td>
+                    </tr>
+                </tbody>
             </table>
             <p>
                 Figures 1 and 2 show, for each of 6 of the isotopes listed in 

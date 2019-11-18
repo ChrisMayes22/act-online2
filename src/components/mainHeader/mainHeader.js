@@ -31,11 +31,15 @@ const mainHeader = (props) => {
             </div>
             {props.children}
             <div className = {[classes.flexContainer, classes.flexContainer__flexEnd].join(' ')}>
-                <button className = {classes.navButton}>Tools</button>
-                <button className = {classes.navButton}>Clear Highlight</button>
-                <Link to={urls.FEEDBACK_VIEW} onClick={props.endTest}>
-                    <button className = {classes.navButton} >End Section</button>
-                </Link>    
+                {props.testActive ?
+                    <React.Fragment>
+                        <button className = {classes.navButton}>Tools</button>
+                        <button className = {classes.navButton}>Clear Highlight</button>
+                        <Link to={urls.FEEDBACK_VIEW} onClick={props.endTest}>
+                            <button className = {classes.navButton} >End Section</button>
+                        </Link>
+                    </React.Fragment>
+                 : null }    
             </div>
         </div>
     );

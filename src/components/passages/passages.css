@@ -1,3 +1,22 @@
+table {
+    table-layout: auto;
+    margin: 2rem;
+    font-size: 1.5rem;
+    border: 1px gray solid;
+    padding: 1rem;
+}
+
+th, td {
+    padding: 0.5rem 1rem;
+    text-align: left;
+}
+
+caption {
+    padding: 0.5rem;
+    border-left: 1px gray solid;
+    border-top: 1px gray solid;
+    border-right: 1px gray solid;
+}
 
 
 .passageContainer > p {

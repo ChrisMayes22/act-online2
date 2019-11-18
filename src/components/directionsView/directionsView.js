@@ -11,7 +11,7 @@ const directionsView = () => {
             />
             <main className={classes.contentContainer}>
             <h1>SCIENCE TEST DIRECTIONS</h1>
-                <h2>You will have 35 minutes to complete this section.</h2>
+                <h2>You will have 35 minutes to complete 40 questions.</h2>
                 <section className={classes.directions}>
                     <p>
                         Read each Science passage through carefully using the scrollbar before you begin to answer the questions 

@@ -8,7 +8,7 @@ class Navbar extends Component {
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
 
-      state = {
+    state = {
         width: 0,
         start: 0,
     }
@@ -26,6 +26,12 @@ class Navbar extends Component {
     this.setState({ width: window.innerWidth });
     }
 
+    numberOfButtonsHandler(){
+        let max = this.props.questionsArr.length;
+        let num = Math.floor(((this.state.width-320)/30 -4) + this.state.start);
+        return num > max ? max : num;
+    }
+
     rightShiftHandler() {
         let start = this.state.start;
         const buttonsRemaining = (this.props.questionsArr.length) - this.numberOfButtonsHandler(); 
@@ -37,12 +43,6 @@ class Navbar extends Component {
     leftShiftHandler() {
         let start = this.state.start - 10 < 0 ? 0 : this.state.start - 10;
         this.setState({start});
-    }
-
-    numberOfButtonsHandler(){
-        let max = this.props.questionsArr.length;
-        let num = Math.floor(((this.state.width-320)/30 -4) + this.state.start);
-        return num > max ? max : num;
     }
 
     render() {
