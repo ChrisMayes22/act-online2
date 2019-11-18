@@ -38,6 +38,8 @@ class Question {
     <span>D: </span>
 */
 
+let i = 12;
+
 const questionsArray = [
     new Question(
         1, 
@@ -150,7 +152,527 @@ const questionsArray = [
         <span>B.  60 days</span>,
         <span>C.  80 days</span>,
         <span>D.  100 days</span>,
-    )
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
+    new Question(
+        i++,
+        <PassageTwo/>,
+        <p>
+            Based on Figure 2, if a sample contained 2,000 atoms of Fe‑59 at 
+            time = 0, at approximately what time will the<em>N</em><sub>t</sub>
+            of the sample be 400? 
+        </p>,
+        <span>A.  40 days</span>,
+        <span>B.  60 days</span>,
+        <span>C.  80 days</span>,
+        <span>D.  100 days</span>,
+    ),
 ];
 
 

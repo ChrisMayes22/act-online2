@@ -7,6 +7,16 @@ label {
 }
 
 .inputBox {
-    font-size: 0.5rem;
-    margin: 0.5rem;
+    font-size: 1.2rem;
+    margin: 1.5rem;
+}
+
+.inputBox > input {
+    margin: 0 1rem;
+}
+
+.prompt {
+    margin: 0.25rem 0 0 1rem;
+    font-size: 1.5rem;
+    line-height: 3rem;
 }

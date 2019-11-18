@@ -4,7 +4,7 @@ import classes from './timer.css';
 class Timer extends Component {
 
     state = {
-        minute: '40',
+        minute: '35',
         second: '00',
     }
 

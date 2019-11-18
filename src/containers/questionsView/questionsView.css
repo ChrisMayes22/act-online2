@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
-
 .bodyFlex{
   display: flex;
   max-height: 82vh;
@@ -13,10 +11,11 @@
   overflow-x: scroll;
   min-width: 50vw;
   max-width: 50vw;
+  padding: 0.1rem 1rem;
 }
 
 .contentContainer > p, li {
   margin: 0.55rem;
-  font-size: 0.5rem;
+  font-size: 1.5rem;
 }
 

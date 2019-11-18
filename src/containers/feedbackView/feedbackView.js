@@ -14,6 +14,7 @@ class DirectionsView extends Component {
                 <MainHeader
                     prevDisabled={true}
                     nextDisabled={true}
+                    pageTitle='Results'
                 />
                 <main>
                     <GradedAnswers

@@ -6,7 +6,7 @@ import figureThree from '../../assets/actdata3.png';
 
 const passageOne = () => {
     return(
-        <React.Fragment>
+        <div className={classes.passageContainer}>
             <div className={classes.passageTitle}>Passage 1</div>
             <p> 
               <em>Deicers</em> (mixtures of salt and water that are used on roads to melt ice) can over time cause concrete pavement to deteriorate.
@@ -38,10 +38,10 @@ const passageOne = () => {
             <p>
               All of the above procedures were repeated for the other deicers (see Figures 1 and 2).
             </p>
-            <img src={figureOne} className={classes.figure} alt="figure 1"/>
             <div className={classes.figureLabel}>Figure 1</div>
-            <img src={figureTwo} className={classes.figure} alt="figure 2"/>
+            <img src={figureOne} className={classes.figure} alt="figure 1"/>
             <div className={classes.figureLabel}>Figure 2</div>
+            <img src={figureTwo} className={classes.figure} alt="figure 2"/>
             <div className={classes.sectionTitle}>Study 2</div>
             <p>
               Sixty more of the cylinders were submerged in 20 L of the Ca(OH)<sub>2</sub>  deicer. 
@@ -56,9 +56,9 @@ const passageOne = () => {
               All of the above procedures were repeated for the other deicers. Finally, the CS of 5 more of the cylinders—cylinders 
               that had not been submerged in any deicer—was determined, and their average CS was calculated (see Figure 3).
             </p>
-            <img src={figureThree} className={classes.figure} alt="figure 3"/>
             <div className={classes.figureLabel}>Figure 3</div>
-        </React.Fragment>
+            <img src={figureThree} className={classes.figure} alt="figure 3"/>
+          </div>
     )
 }
 

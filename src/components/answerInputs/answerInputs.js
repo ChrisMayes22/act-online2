@@ -4,7 +4,7 @@ import classes from './answerInputs.css';
 const answerInput = (props) => {
     return (
         <React.Fragment>
-            <p children={props.prompt}/> 
+            <p children={props.prompt} className={classes.prompt}/> 
             <div className={classes.inputBox}>
                 <input type='radio' 
                     id={`A${props.answerIndex}`}  

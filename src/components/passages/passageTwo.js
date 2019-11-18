@@ -5,7 +5,7 @@ import figureTwoUrl from '../../assets/p2fig2.png';
 
 const passageTwo = () => {
     return(
-        <React.Fragment>
+        <div className={classes.passageContainer}>
             <div className={classes.passageTitle}>Passage 2</div>
             <p>
                 When the nucleus of an atom of a radioactive isotope undergoes 
@@ -75,7 +75,7 @@ const passageTwo = () => {
             <p className={classes.figureLabel}>Figure 1</p>
             <img src={figureTwoUrl} className={classes.figure} alt="figure 2"/>
             <p className={classes.figureLabel}>FIgure 2</p>
-        </React.Fragment>
+        </div>
     )
 }
 

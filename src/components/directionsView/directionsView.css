@@ -1,0 +1,32 @@
+.contentContainer {
+    margin: 9rem 10vw;
+    border: 1px 
+    black solid;
+    padding: 2rem 3rem;
+    border-radius: 2rem;
+    background-color: rgb(241, 241, 241);
+    color: rgb(36, 36, 36);
+}
+
+.contentContainer > h1 {
+    font-size: 4rem;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 1px;
+}
+
+.contentContainer > h2 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: normal;
+}
+
+.directions {
+    margin: 4.5rem auto;
+}
+
+.directions > p {
+    margin: 2.5rem;
+    font-size: 2rem;
+    font-family: 'Open Sans', sans-serif
+}

@@ -3,29 +3,54 @@ import classes from './navbar.css';
 
 class Navbar extends Component {
 
-    state = {
+    constructor(props) {
+        super(props);
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    }
+
+      state = {
+        width: 0,
         start: 0,
-        end: this.props.questionsArr.length > 40 ? 40 : this.props.questionsArr.length
+    }
+      
+    componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+    }
+    
+    componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+    }
+    
+    updateWindowDimensions() {
+    this.setState({ width: window.innerWidth });
     }
 
     rightShiftHandler() {
-        let end = this.state.end + 20 > this.props.questionsArr.length ? this.props.questionsArr.length : this.state.end + 20;
-        let start = end - 40;
-        this.setState({start, end});
+        let start = this.state.start;
+        const buttonsRemaining = (this.props.questionsArr.length) - this.numberOfButtonsHandler(); 
+        const numToShift = buttonsRemaining > 10 ? 10 : buttonsRemaining;
+        start += numToShift;
+        this.setState({start});
     }
     
     leftShiftHandler() {
-        let start = this.state.start - 20 < 0 ? 0 : this.state.start - 20;
-        let end = start + 40;
-        this.setState({start, end});
+        let start = this.state.start - 10 < 0 ? 0 : this.state.start - 10;
+        this.setState({start});
+    }
+
+    numberOfButtonsHandler(){
+        let max = this.props.questionsArr.length;
+        let num = Math.floor(((this.state.width-320)/30 -4) + this.state.start);
+        return num > max ? max : num;
     }
 
     render() {
         return (
-            <div className = {classes.flexContainer}>
+            <div className = {classes.buttonContainer}>
                 <button className = {classes.navbarButton} children='«' onClick = {() => this.leftShiftHandler()}/>
                 <button className = {[classes.navbarButton, classes.grayButton].join(' ')} children='instr'/> 
-                {this.props.questionsArr.slice(this.state.start, this.state.end).map((el, i) => {
+                {this.props.questionsArr.slice(this.state.start, this.numberOfButtonsHandler()).map((el, i) => {
                     return <button 
                             className = {[
                                 classes.navbarButton, 

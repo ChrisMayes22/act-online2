@@ -19,8 +19,6 @@ class QuestionView extends Component {
   state = {
     questionsArr: questionsArr,
     //Note: question id MUST remain integer corresponding to its index +1!! Consider adding a check for this in future. 
-    start: 0,
-    end: 40,
     activeIndex: 0,
     studentRes: new Array(questionsArr.length),
   }
@@ -61,9 +59,8 @@ class QuestionView extends Component {
 
   render() {
     return (
-      <div className={classes.background}>
+      <React.Fragment>
         <MainHeader 
-          questionNumber = {this.state.activeIndex ? this.state.questionsArr[this.state.activeIndex].id : 1} 
           prevQuestion = {() => this.selectQuestionHandler(this.state.activeIndex - 1)}
           nextQuestion = {() => this.selectQuestionHandler(this.state.activeIndex + 1)}
           prevDisabled = {!this.state.activeIndex}
@@ -93,12 +90,10 @@ class QuestionView extends Component {
         <MainFooter
           selectButton={this.selectQuestionHandler}
           flagButton={() => this.flagHandler()}
-          start={this.state.start }
-          end={this.state.end }
           questionsArr={this.state.questionsArr}
         />
         
-      </div>
+      </React.Fragment>
     );
   }
 }

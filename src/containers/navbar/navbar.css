@@ -1,7 +1,7 @@
 .navbarButton{
-    height: 1.3rem;
-    width:1.3rem;
-    font-size: 0.5rem;
+    height: 3rem;
+    width: 3rem;
+    font-size: 1rem;
     font-weight: bold;
     margin: 0;
     border-left: solid gray 0.5px;
@@ -26,30 +26,6 @@
     cursor: pointer;
 }
 
-.flagButton{
-    height: 2rem;
-    width: 3rem;
-    font-size: 0.5rem;
-    font-weight: bold;
-    margin: 0;
-    border: solid gray 0.5px;
-    color: rgb(170, 170, 170);
-    padding: 1px;
-}
-
-.flagButton:hover {
-    color: #f8c291;
-    border: solid 1px #f8c291;
-    background-color: #b71540;
-    cursor: pointer;
-}
-
-.flagButton:active {
-    color: #FDFDFD;
-    border: solid 1px #FDFDFD;
-    background-color: #f8c291;
-    cursor: pointer;
-}
 
 .answered{
     border-left: solid rgb(110, 110, 110) 0.5px;
@@ -61,8 +37,8 @@
 }
 
 .selected {
-    height: 1.4rem;
-    width: 1.4rem;
+    height: 3.2rem;
+    width: 3.2rem;
     color: #6a89cc;
     background-color: #0c2461;
     cursor: pointer;
@@ -78,13 +54,8 @@
     cursor: pointer;
 }
 
-.flexContainer {
-    display: inline-flex;
-    padding: 0.7rem 1rem;
-    flex-direction: row;
-    margin: 0 auto;
-    width: 90%;
-    flex-wrap: wrap;
+.buttonContainer {
+    width: 100%;
 }
 
 .lastButton {
