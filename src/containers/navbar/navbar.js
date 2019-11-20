@@ -14,16 +14,16 @@ class Navbar extends Component {
     }
       
     componentDidMount() {
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
     }
     
     componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
+        window.removeEventListener('resize', this.updateWindowDimensions);
     }
     
     updateWindowDimensions() {
-    this.setState({ width: window.innerWidth });
+        this.setState({ width: window.innerWidth });
     }
 
     numberOfButtonsHandler(){
@@ -34,8 +34,9 @@ class Navbar extends Component {
 
     rightShiftHandler() {
         let start = this.state.start;
-        const buttonsRemaining = (this.props.questionsArr.length) - this.numberOfButtonsHandler(); 
+        const buttonsRemaining = (this.props.questionsArr.length) - this.numberOfButtonsHandler();
         const numToShift = buttonsRemaining > 10 ? 10 : buttonsRemaining;
+        console.log('START', start, 'BUTTONS REMAINING', buttonsRemaining, 'NUM TO SHIFT', numToShift)
         start += numToShift;
         this.setState({start});
     }
@@ -63,7 +64,9 @@ class Navbar extends Component {
                             onClick = {() => this.props.selectButton(el.id - 1)}
                     />
                 })}
-                <button className = {[classes.navbarButton, classes.lastButton].join(' ')} children = {'»'} onClick = {() => this.rightShiftHandler()}/>
+                <button className = {[classes.navbarButton, classes.lastButton].join(' ')} 
+                    children = {'»'} onClick = {() => this.rightShiftHandler()}
+                />
             </div>
         )
     }

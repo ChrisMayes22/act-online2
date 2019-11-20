@@ -1,3 +1,20 @@
+.passageContainer {
+    user-select: none;
+}
+
+.passageContainer > p {
+    font-size: 1.3rem;
+    margin:0.8rem
+}
+
+.passageContainer > ol {
+    padding: 0 3rem;
+}
+
+.passageContainer > ol > li {
+    font-size: 1.3rem
+}
+
 table {
     table-layout: auto;
     margin: 2rem;
@@ -16,20 +33,6 @@ caption {
     border-left: 1px gray solid;
     border-top: 1px gray solid;
     border-right: 1px gray solid;
-}
-
-
-.passageContainer > p {
-    font-size: 1.3rem;
-    margin:0.8rem
-}
-
-.passageContainer > ol {
-    padding: 0 3rem;
-}
-
-.passageContainer > ol > li {
-    font-size: 1.3rem
 }
 
 .sectionTitle {

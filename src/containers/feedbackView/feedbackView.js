@@ -35,3 +35,8 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, null)(DirectionsView);
+
+
+// Right or wrong?
+// Answered or not? 
+// 
