@@ -3,6 +3,14 @@
     font-size: 2rem;
 }
 
-.red{
+.bodyParagraph::selection{
+    background-color: rgba(255, 0, 0, 0.185);
+}
+
+.highlight{
     background-color: red;
+}
+
+.highlight::selection{
+    background-color: rgba(255, 0, 0, 0.185);
 }

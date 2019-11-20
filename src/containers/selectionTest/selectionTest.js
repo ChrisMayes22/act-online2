@@ -13,39 +13,49 @@ class selectionTest extends Component {
         text: ['This is a paragraph detailing important information about the test A.',
             'This is a paragraph detailing important information about the test C.',
             'This is a paragraph detailing important information about the test D.',
-            'This is a paragraph detailing important information about the test E.']
+            'This is a paragraph detailing important information about the test E.'] 
+                //text array will be received as props in real application
     }
 
     componentDidMount(){
         this.expectedLengths = this.state.text.map(el => el.length);
     }
 
-    getOffsetsHandler(select, index){
-        const anchor = select.anchorNode;
-        const focus = select.focusNode;
-        const anchorParent = anchor.parentNode;
-        const focusParent = focus.parentNode;
+    componentDidUpdate(){
+        window.getSelection().empty();
+    }
+
+    getParentBodyP(node){
+        if(!node)
+            return null;
+        if(node.attributes && node.attributes.class.nodeValue.includes(classes.bodyParagraph))
+            return node;
+        if(node.parentNode.attributes.class.nodeValue.includes(classes.bodyParagraph))
+            return node.parentNode;
+        return this.getParentBodyP(node.parentNode);
+    }
+
+    getOffsetsHandler(select){
+        let focusNode, anchorNode;
+        ({ focusNode, anchorNode } = select);
+        let anchorParentP = this.getParentBodyP(anchorNode);
+        const focusParentP = this.getParentBodyP(focusNode);
         let anchorOffset = select.anchorOffset;
         let focusOffset = select.focusOffset;
-        if(focusParent.attributes.id.nodeValue === anchorParent.attributes.id.nodeValue){
-            console.log('ANCHOR PARENT LENGTH', anchorParent.childNodes[0]);
-            console.log('FOCUS PARENT LENGTH', focusParent.childNodes[0]);
-            if(anchorParent.childNodes.length !== this.expectedLengths[index]){
+        if(focusParentP.attributes.id.nodeValue === anchorParentP.attributes.id.nodeValue){
+            if(anchorParentP.childNodes.length !== 1){
                 let offsetFromParentStart = 0;
-                console.log('update Offsets conditional entered')
-                for(let i = 0; i < anchorParent.childNodes.length; i++){
-                    const currentNode = anchorParent.childNodes[i];
-                    if(anchor.textContent === currentNode.textContent){
-                        console.log('anchorOffset grown')
+                for(let i = 0; i < anchorParentP.childNodes.length; i++){
+                    const currentNode = anchorParentP.childNodes[i];
+                    if(anchorNode.textContent === currentNode.textContent){
                         anchorOffset += offsetFromParentStart;
                     };
-                    if(focus.textContent === currentNode.textContent){
+                    if(focusNode.textContent === currentNode.textContent){
                         focusOffset += offsetFromParentStart;
                     }
                     offsetFromParentStart += currentNode.textContent.length;
                 }
             }
-            
         }
         const forward = anchorOffset < focusOffset;
         if(!forward){
@@ -57,48 +67,119 @@ class selectionTest extends Component {
         }
     }
 
+    nullCasesHandler(select){
+        if(select.isCollapsed){
+            console.log('select was collapsed');
+            return null;
+        }
+        if(select.anchorNode.attributes && select.anchorNode.attributes.class.nodeValue.includes(classes.bodyParagraph)){
+            console.log('anchorNode was bodyP')
+            return null
+        }
+        if(select.focusNode.attributes && select.focusNode.attributes.class.nodeValue.includes(classes.bodyParagraph)){
+            console.log('focusNode was bodyP')
+            return null
+        }
+        const anchor = select.anchorNode;
+        const focus = select.focusNode;
+        let anchorParentP = this.getParentBodyP(anchor);
+        const focusParentP = this.getParentBodyP(focus);
+        if(!anchorParentP || !focusParentP){
+            console.log('selection was not within bodyP')
+            return null;
+        }
+        if(anchor.parentNode.attributes.id.nodeValue === focus.parentNode.attributes.id.nodeValue){
+            if(anchor.parentNode.attributes.class.nodeValue.includes(classes.highlight)){
+                console.log('selection was within existing highlight')
+                return null;
+            }
+        }
+
+        return true;
+    }
+
     selectionHandler(e){
         e.preventDefault()
         const select = window.getSelection(e)
-        if(select.isCollapsed)
+        if(!this.nullCasesHandler(select)){
+            console.log('null returned')
             return null;
-        const index = select.anchorNode.parentElement.attributes[1].nodeValue //id of anchorNode
-        const selectionOffsets = this.getOffsetsHandler(select, index);
-        let anchorOffset = selectionOffsets.anchorOffset;
-        let focusOffset = selectionOffsets.focusOffset;
-        const offsets=[...this.state.offsets];
-        const currentNodeOffsets = offsets[index] || [];
-        if(currentNodeOffsets[0]){
-            for(let i = 0; i < offsets[index].length; i++){
-                let prevAnchor = currentNodeOffsets[i].anchorOffset;
-                let prevFocus = currentNodeOffsets[i].focusOffset;
-                // console.log('PREV ANCHOR', prevAnchor, 'PREV FOCUS', prevFocus, 'CURRENT ANCHOR', anchorOffset, 'CURRENT FOCUS', focusOffset);
-                if(anchorOffset < prevAnchor && focusOffset > prevFocus){
-                    currentNodeOffsets[i] = null;
-                } else if(anchorOffset < prevAnchor && focusOffset > prevAnchor) {
-                    focusOffset = prevFocus;
-                    currentNodeOffsets[i] = null;
-                } else if(focusOffset > prevFocus && anchorOffset < prevFocus){
-                    anchorOffset = prevAnchor;
-                    currentNodeOffsets[i] = null;
+        }
+        this.updateOffsetsHandler(select);
+        // console.log('INDEX', index);
+        // let anchorOffset, focusOffset;
+        // ({anchorOffset, focusOffset } = this.getOffsetsHandler(select, index) || {anchorOffset: null, focusOffset: null});
+        // if(!anchorOffset && !focusOffset)
+        //     return null;
+        // const offsets=[...this.state.offsets];
+        // const currentNodeOffsets = offsets[index] || [];
+        // if(currentNodeOffsets[0]){
+        //     for(let i = 0; i < offsets[index].length; i++){
+        //         let prevAnchor = currentNodeOffsets[i].anchorOffset;
+        //         let prevFocus = currentNodeOffsets[i].focusOffset;
+        //         if(anchorOffset < prevAnchor && focusOffset > prevFocus){
+        //             currentNodeOffsets[i] = null;
+        //         } else if(anchorOffset < prevAnchor && focusOffset > prevAnchor) {
+        //             focusOffset = prevFocus;
+        //             currentNodeOffsets[i] = null;
+        //         } else if(focusOffset > prevFocus && anchorOffset < prevFocus){
+        //             anchorOffset = prevAnchor;
+        //             currentNodeOffsets[i] = null;
+        //         }
+        //     }
+        // }
+        // offsets[index] = currentNodeOffsets.filter(el => el);
+        // const i = offsets[index].findIndex(el => anchorOffset < el.anchorOffset);
+        // if(i !== -1){
+        //     offsets[index].splice(i, 0, {anchorOffset, focusOffset});
+        // } else {
+        //     offsets[index].push({anchorOffset, focusOffset});
+        // }
+        // this.setState({offsets})
+    }
+
+    updateOffsetsHandler(select){
+        console.log(select);
+        const anchorParentP = this.getParentBodyP(select.anchorNode);
+        const focusParentP = this.getParentBodyP(select.focusNode);
+        if(focusParentP.attributes.id.nodeValue === anchorParentP.attributes.id.nodeValue){
+            let anchorOffset, focusOffset;
+            ({ anchorOffset, focusOffset } = this.getOffsetsHandler(select) || {anchorOffset: null, focusOffset: null});
+            if(!anchorOffset && !focusOffset)
+                return null;
+            const offsets=[...this.state.offsets];
+            const focusParentPId = focusParentP.attributes.id.nodeValue;
+            const index = focusParentPId[focusParentPId-1]
+            const currentNodeOffsets = offsets[index] || [];
+            if(currentNodeOffsets[0]){
+                for(let i = 0; i < offsets[index].length; i++){
+                    let prevAnchor = currentNodeOffsets[i].anchorOffset;
+                    let prevFocus = currentNodeOffsets[i].focusOffset;
+                    if(anchorOffset < prevAnchor && focusOffset > prevFocus){
+                        currentNodeOffsets[i] = null;
+                    } else if(anchorOffset < prevAnchor && focusOffset > prevAnchor) {
+                        focusOffset = prevFocus;
+                        currentNodeOffsets[i] = null;
+                    } else if(focusOffset > prevFocus && anchorOffset < prevFocus){
+                        anchorOffset = prevAnchor;
+                        currentNodeOffsets[i] = null;
+                    }
                 }
             }
+            offsets[index] = currentNodeOffsets.filter(el => el);
+            const i = offsets[index].findIndex(el => anchorOffset < el.anchorOffset);
+            if(i !== -1){
+                offsets[index].splice(i, 0, {anchorOffset, focusOffset});
+            } else {
+                offsets[index].push({anchorOffset, focusOffset});
+            }
+            this.setState({offsets})
         }
-        offsets[index] = currentNodeOffsets.filter(el => el);
-        const i = offsets[index].findIndex(el => anchorOffset < el.anchorOffset);
-        if(i !== -1){
-            offsets[index].splice(i, 0, {anchorOffset, focusOffset});
-        } else {
-            offsets[index].push({anchorOffset, focusOffset});
-        }
-        console.log('OFFSETS', offsets)
-        console.log('i', i)
-        this.setState({offsets})
     }
     
     highlightRangeHandler(text, index){
         if(!this.state.offsets[index])
-            return <p className={classes.bodyParagraph} key={`paragraph${index}`} id={index} children={text}/>
+            return <p className={classes.bodyParagraph} key={`bodyP${index}key`} id={`bodyP${index}`} children={text}/>
         let pBody = [];
         const splitText = this.state.text[index].split('');
         this.state.offsets[index].forEach((el, i, arr) => {
@@ -108,7 +189,12 @@ class selectionTest extends Component {
             const beginning = splitText.slice(start, highlightBegin).join('');
             const middle = splitText.slice(highlightBegin, highlightEnd).join('');
             pBody.push(beginning);
-            pBody.push(<span className={classes.red} id={index} key={`span${i}intext${this.state.text[0][0]}`}>{middle}</span>);
+            pBody.push(<span 
+                        className={classes.highlight} 
+                        id={`p${index}highlightSpan${i}`} 
+                        key={`p${index}highlightSpan${i}key`}
+                        children={middle}
+                        />)
             if(!arr[i+1]){
                 const end = splitText.slice(highlightEnd).join('');
                 pBody.push(end);
@@ -116,7 +202,7 @@ class selectionTest extends Component {
         })
         
         return(
-            <p className={classes.bodyParagraph} key={`paragraph${index}`} id={index}>
+            <p className={classes.bodyParagraph} key={`paragraph${index}`} id={`bodyP${index}`}>
                 {pBody}
             </p>
         )
