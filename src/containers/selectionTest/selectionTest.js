@@ -76,16 +76,21 @@ class selectionTest extends Component {
                 }
             }
             const focusIndex = select.focusParentId[select.focusParentId.length-1];
-            const anchorIndex = select.anchorParentId[select.anchorParentId.length];
+            const anchorIndex = select.anchorParentId[select.anchorParentId.length-1];
+            console.log(select);
             if(focusIndex > anchorIndex){
                 select = {
-                    start: [anchorIndex, select.anchorOffset],
-                    end: [focusIndex, select.focusOffset]
+                    startParent: select.anchorParent,
+                    endParent: select.focusParent,
+                    start: { parentIndex: anchorIndex, offset: select.anchorOffset },
+                    end: { parentIndex: focusIndex, offset: select.focusOffset }
                 }
             } else {
                 select = {
-                    start: [focusIndex, select.focusOffset],
-                    end: [anchorIndex, select.anchorOffset]
+                    startParent: select.focusParent,
+                    endParent: select.anchorParent,
+                    start: { parentIndex: focusIndex, offset: select.focusOffset },
+                    end: { parentIndex: anchorIndex, offset: select.anchorOffset }
                 }
             }
         }
@@ -150,8 +155,38 @@ class selectionTest extends Component {
     }
 
     multiPUpdateOffsetsHandler(select){ 
-        //TODO: Set up multi-paragraph handling
-
+        const offsets = [...this.state.offsets];
+        let startParagraphOffsets = offsets[select.start.parentIndex] || [];
+        let endParagraphOffsets = offsets[select.end.parentIndex] || [];
+        let startParentLength = 0;
+        for(let i = 0; i < select.startParent.childNodes.length; i++){
+            startParentLength += select.startParent.childNodes[i].length;
+        }
+        console.log('START PARENT', select.startParent);
+        if(startParagraphOffsets[0]){
+            for(let i = 0; i < startParagraphOffsets.length; i++){
+                startParagraphOffsets[i] = select.start.offset <= startParagraphOffsets[i].anchorOffset ? null : startParagraphOffsets[i];
+            }
+            startParagraphOffsets = startParagraphOffsets.filter(el => el)
+        }
+        startParagraphOffsets.push({ anchorOffset: select.start.offset, focusOffset: startParentLength - 1 });
+        offsets[select.start.parentIndex] = startParagraphOffsets;
+        if(endParagraphOffsets[0]){
+            for(let i = 0; i < endParagraphOffsets.length; i++){
+                endParagraphOffsets[i] = select.end.offset >= endParagraphOffsets[i].focusOffset ? null : endParagraphOffsets[i];
+            }
+            endParagraphOffsets = endParagraphOffsets.filter(el => el)
+        }
+        endParagraphOffsets.push({ anchorOffset: 0, focusOffset: select.end.offset });
+        offsets[select.end.parentIndex] = endParagraphOffsets;
+        if(select.start.parentIndex - select.end.parentIndex !== 1){
+            for(let i = select.start.parentIndex + 1; i < select.end.parentIndex; i++){
+                offsets[i] = [];
+                offsets[i].push({ anchorOffset: 0, focusOffset: offsets[i].length-1 })
+            }
+        }
+        console.log('OFFSETS', offsets);
+        this.setState({ offsets })
     }
 
     singlePUpdateOffsetsHandler(select){
