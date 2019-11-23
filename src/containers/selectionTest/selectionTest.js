@@ -39,19 +39,17 @@ class selectionTest extends Component {
         if(singleParent){
             if(select.anchorParent.childNodes.length !== 1){
                 let offsetFromParentStart = 0;
-                for(let i = 0; i < select.anchorParent.childNodes.length; i++){
-                    const currentNode = select.anchorParent.childNodes[i];
-                    if(select.anchor.textContent === currentNode.textContent){
+                select.anchorParent.childNodes.forEach(child => {
+                    if(select.anchor.textContent === child.textContent){
                         select.anchorOffset += offsetFromParentStart;
                     };
-                    if(select.focus.textContent === currentNode.textContent){
+                    if(select.focus.textContent === child.textContent){
                         select.focusOffset += offsetFromParentStart;
                     }
-                    offsetFromParentStart += currentNode.textContent.length;
-                }
+                    offsetFromParentStart += child.textContent.length;
+                });
             }
-            const forward = select.anchorOffset < select.focusOffset;
-            if(!forward){
+            if(select.anchorOffset > select.focusOffset){
                 [select.anchorOffset, select.focusOffset] = [select.focusOffset, select.anchorOffset];
             }
         } else {
@@ -77,7 +75,6 @@ class selectionTest extends Component {
             }
             const focusIndex = select.focusParentId[select.focusParentId.length-1];
             const anchorIndex = select.anchorParentId[select.anchorParentId.length-1];
-            console.log(select);
             if(focusIndex > anchorIndex){
                 select = {
                     startParent: select.anchorParent,
@@ -156,36 +153,59 @@ class selectionTest extends Component {
 
     multiPUpdateOffsetsHandler(select){ 
         const offsets = [...this.state.offsets];
-        let startParagraphOffsets = offsets[select.start.parentIndex] || [];
-        let endParagraphOffsets = offsets[select.end.parentIndex] || [];
-        let startParentLength = 0;
-        for(let i = 0; i < select.startParent.childNodes.length; i++){
-            startParentLength += select.startParent.childNodes[i].length;
-        }
-        console.log('START PARENT', select.startParent);
-        if(startParagraphOffsets[0]){
-            for(let i = 0; i < startParagraphOffsets.length; i++){
-                startParagraphOffsets[i] = select.start.offset <= startParagraphOffsets[i].anchorOffset ? null : startParagraphOffsets[i];
-            }
-            startParagraphOffsets = startParagraphOffsets.filter(el => el)
-        }
-        startParagraphOffsets.push({ anchorOffset: select.start.offset, focusOffset: startParentLength - 1 });
-        offsets[select.start.parentIndex] = startParagraphOffsets;
-        if(endParagraphOffsets[0]){
-            for(let i = 0; i < endParagraphOffsets.length; i++){
-                endParagraphOffsets[i] = select.end.offset >= endParagraphOffsets[i].focusOffset ? null : endParagraphOffsets[i];
-            }
-            endParagraphOffsets = endParagraphOffsets.filter(el => el)
-        }
-        endParagraphOffsets.push({ anchorOffset: 0, focusOffset: select.end.offset });
-        offsets[select.end.parentIndex] = endParagraphOffsets;
+        const prevStart = offsets[select.start.parentIndex] || [];
+        const prevEnd = offsets[select.end.parentIndex] || [];
+        const startChildren = [...select.startParent.childNodes];
+        const startParentLength = startChildren.reduce((sum, childNode) => {
+            return sum + ((childNode.innerText && childNode.innerText.length) || childNode.length);
+        }, 0);
+
+        console.log('START PARENT LENGTH', startParentLength)
+
+        offsets[select.start.parentIndex] = 
+            prevStart[0] ? 
+            prevStart.map(el => {
+                if(select.start.offset <= el.anchorOffset) { 
+                    return null;
+                } else if(select.start.offset <= el.focusOffset) {
+                    select.start.offset = el.anchorOffset;
+                    return null;
+                } else { 
+                    return el;
+                }
+            }).filter(el => el)
+            .concat([{ anchorOffset: select.start.offset, focusOffset: startParentLength }])
+            :
+            [{ anchorOffset: select.start.offset, focusOffset: startParentLength }];
+
+
+        offsets[select.end.parentIndex] = 
+            prevEnd[0] ? 
+            prevEnd.map(el => {
+                if(select.end.offset >= el.focusOffset) { 
+                    return null;
+                } else if(select.end.offset <= el.focusOffset) {
+                    select.end.offset = el.focusOffset;
+                    return null;
+                } else { 
+                    return el;
+                }
+            }).filter(el => el)
+            .concat([{ anchorOffset: 0, focusOffset: select.end.offset }])
+            :
+            [{ anchorOffset: 0, focusOffset: select.end.offset }];
+
+
         if(select.start.parentIndex - select.end.parentIndex !== 1){
-            for(let i = select.start.parentIndex + 1; i < select.end.parentIndex; i++){
-                offsets[i] = [];
-                offsets[i].push({ anchorOffset: 0, focusOffset: offsets[i].length-1 })
-            }
+            this.expectedLengths.forEach((el, i) => {
+                if(i > select.start.parentIndex && i < select.end.parentIndex){
+                    console.log('i', i)
+                    el = [];
+                    offsets[i] = el.concat([{ anchorOffset: 0, focusOffset: this.expectedLengths[i] }])
+                }
+            })
         }
-        console.log('OFFSETS', offsets);
+
         this.setState({ offsets })
     }
 
