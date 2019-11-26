@@ -3,6 +3,10 @@
     font-size: 2rem;
 }
 
+.bodySpan{
+    font-size: 2rem;
+}
+
 .bodyParagraph::selection{
     background-color: rgba(255, 0, 0, 0.185);
 }

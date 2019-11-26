@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import classes from './selectionTest.css';
+import uniqid from 'uniqid';
+
 
 class selectionTest extends Component {
 
@@ -10,69 +12,114 @@ class selectionTest extends Component {
 
     state = {
         offsets: [],
-        text: ['This is a paragraph detailing important information about the test A.',
-            'This is a paragraph detailing important information about the test C.',
-            'This is a paragraph detailing important information about the test D.',
-            'This is a paragraph detailing important information about the test E.'] 
+        body: [<p className={classes.bodyParagraph} key={uniqid('key-')} id={uniqid('highlight-container-')}>
+                    <span id={uniqid('span-')}>this is <em id={uniqid('em-')}>emphasized</em> text A</span>
+                </p>,
+                <p className={classes.bodyParagraph} key={uniqid('key-')} id={uniqid('highlight-container-')}>
+                    <span id={uniqid('span-')}>this is <em id={uniqid('em-')}>emphasized</em> text B</span>
+                </p>,
+                <p className={classes.bodyParagraph} key={uniqid('key-')} id={uniqid('highlight-container-')}>
+                    <span id={uniqid('span-')}>this is <em id={uniqid('em-')}>emphasized</em> text C</span>
+                </p>,
+                <p className={classes.bodyParagraph} key={uniqid('key-')} id={uniqid('highlight-container-')}>
+                    <span id={uniqid('span-')}>this is <em id={uniqid('em-')}>emphasized</em> text D</span>
+                </p>] 
                 //text array will be received as props in real application
     }
 
     componentDidMount(){
-        this.expectedLengths = this.state.text.map(el => el.length);
+        
+        
+        // TODO: Rebuild the highlight app using this framework.
+        // this.expectedLengths = this.state.text.map(el => el[0].length);
     }
 
     componentDidUpdate(){
         window.getSelection().empty();
     }
 
-    getParentBodyP(node){
-        if(!node)
+    
+
+    getJSXNodeFromIds(ids, container){
+        if(container.props.id === ids[ids.length-1]){
+            return container;
+        }
+        let currentNode = container;
+        ids.forEach(el => {
+            const ch = currentNode.props.children
+            currentNode = Array.isArray(ch) ? ch.find(child => child.props && child.props.id === el) : ch
+            console.log('CURRENT NODE', currentNode);
+        })
+        //TODO: Keep working on this fn
+        console.log('CONTAINER PROPS', container.props);
+    }
+
+    selectionHandler(e){
+        e.preventDefault()
+        const select = window.getSelection(e)
+        const anchorParentId = select.anchorNode.parentNode.attributes.id.nodeValue;
+        const branchIds = this.getBranchIds(select.anchorNode, []);
+        const container = {...this.state.body.find(el => el.props.id === branchIds[0])};
+        this.getJSXNodeFromIds(branchIds, container);        
+        // console.log(select);
+        // if(!this.nullCasesHandler(select))
+        //     return null;
+        // const anchorParent = this.getParentBodyP(select.anchorNode);
+        // const focusParent = this.getParentBodyP(select.focusNode);
+        // const selectPkg = {
+        //     anchor: select.anchorNode,
+        //     anchorOffset: select.anchorOffset,
+        //     anchorParent,
+        //     anchorParentId: anchorParent.attributes.id.nodeValue, 
+        //     focus: select.focusNode,
+        //     focusOffset: select.focusOffset,
+        //     focusParent,
+        //     focusParentId: focusParent.attributes.id.nodeValue
+        // }
+        // if(selectPkg.anchorParentId === selectPkg.focusParentId){
+        //     const checkedPkg = this.checkOffsetsHandler(selectPkg, true);
+        //     this.singlePUpdateOffsetsHandler(checkedPkg);
+        // } else {
+        //     const checkedPkg = this.checkOffsetsHandler(selectPkg, false);
+        //     this.multiPUpdateOffsetsHandler(checkedPkg);
+        // }
+    }
+
+    getBranchIds(node, arr){
+        if(!node){
+            console.log('WARNING! no parent for targeted element found.')
             return null;
-        if(node.attributes && node.attributes.class.nodeValue.includes(classes.bodyParagraph))
-            return node;
-        if(node.parentNode.attributes.class.nodeValue.includes(classes.bodyParagraph))
-            return node.parentNode;
-        return this.getParentBodyP(node.parentNode);
+        }
+        if(node.attributes && node.attributes.id && node.attributes.id.nodeValue.includes('highlight-container-')){
+            arr.push(node.attributes.id.nodeValue)
+            return arr.reverse();
+        }
+        if(node.attributes && node.attributes.id){
+            arr.push(node.attributes.id.nodeValue);
+        } else {
+            console.log('WARNING: NODE WITH NO ID -- ', node)
+        }
+        return this.getBranchIds(node.parentNode, arr);
+    }
+
+    addOffsetFromParentStart(child, parent, offset){
+        let offsetFromParentStart = 0;
+            parent.childNodes.forEach(c => {
+                if(child.textContent === c.textContent)
+                    offset += offsetFromParentStart;
+                offsetFromParentStart += c.textContent.length;
+            });
+        return offset
     }
 
     checkOffsetsHandler(select, singleParent){
+       select.anchorOffset = this.addOffsetFromParentStart(select.anchor, select.anchorParent, select.anchorOffset);
+       select.focusOffset = this.addOffsetFromParentStart(select.focus, select.focusParent, select.focusOffset);
         if(singleParent){
-            if(select.anchorParent.childNodes.length !== 1){
-                let offsetFromParentStart = 0;
-                select.anchorParent.childNodes.forEach(child => {
-                    if(select.anchor.textContent === child.textContent){
-                        select.anchorOffset += offsetFromParentStart;
-                    };
-                    if(select.focus.textContent === child.textContent){
-                        select.focusOffset += offsetFromParentStart;
-                    }
-                    offsetFromParentStart += child.textContent.length;
-                });
-            }
             if(select.anchorOffset > select.focusOffset){
                 [select.anchorOffset, select.focusOffset] = [select.focusOffset, select.anchorOffset];
             }
         } else {
-            if(select.anchorParent.childNodes.length !== 1){
-                let offsetFromParentStart = 0;
-                for(let i = 0; i < select.anchorParent.childNodes.length; i++){
-                    const currentNode = select.anchorParent.childNodes[i];
-                    if(select.anchor.textContent === currentNode.textContent){
-                        select.anchorOffset += offsetFromParentStart;
-                    };
-                    offsetFromParentStart += currentNode.textContent.length;
-                }
-            }
-            if(select.focusParent.childNodes.length !== 1){
-                let offsetFromParentStart = 0;
-                for(let i = 0; i < select.focusParent.childNodes.length; i++){
-                    const currentNode = select.focusParent.childNodes[i];
-                    if(select.focus.textContent === currentNode.textContent){
-                        select.focusOffset += offsetFromParentStart;
-                    };
-                    offsetFromParentStart += currentNode.textContent.length;
-                }
-            }
             const focusIndex = select.focusParentId[select.focusParentId.length-1];
             const anchorIndex = select.anchorParentId[select.anchorParentId.length-1];
             if(focusIndex > anchorIndex){
@@ -124,33 +171,6 @@ class selectionTest extends Component {
         return true;
     }
 
-    selectionHandler(e){
-        e.preventDefault()
-        const select = window.getSelection(e)
-        if(!this.nullCasesHandler(select))
-            return null;
-        const anchorParent = this.getParentBodyP(select.anchorNode);
-        const focusParent = this.getParentBodyP(select.focusNode);
-        const selectPkg = {
-            anchor: select.anchorNode,
-            anchorOffset: select.anchorOffset,
-            anchorParent,
-            anchorParentId: anchorParent.attributes.id.nodeValue, 
-            focus: select.focusNode,
-            focusOffset: select.focusOffset,
-            focusParent,
-            focusParentId: focusParent.attributes.id.nodeValue
-        }
-        if(selectPkg.anchorParentId === selectPkg.focusParentId){
-            const checkedPkg = this.checkOffsetsHandler(selectPkg, true);
-            this.singlePUpdateOffsetsHandler(checkedPkg);
-        } else {
-            const checkedPkg = this.checkOffsetsHandler(selectPkg, false);
-            this.multiPUpdateOffsetsHandler(checkedPkg);
-        }
-        
-    }
-
     multiPUpdateOffsetsHandler(select){ 
         const offsets = [...this.state.offsets];
         const prevStart = offsets[select.start.parentIndex] || [];
@@ -159,9 +179,6 @@ class selectionTest extends Component {
         const startParentLength = startChildren.reduce((sum, childNode) => {
             return sum + ((childNode.innerText && childNode.innerText.length) || childNode.length);
         }, 0);
-
-        console.log('START PARENT LENGTH', startParentLength)
-
         offsets[select.start.parentIndex] = 
             prevStart[0] ? 
             prevStart.map(el => {
@@ -177,7 +194,6 @@ class selectionTest extends Component {
             .concat([{ anchorOffset: select.start.offset, focusOffset: startParentLength }])
             :
             [{ anchorOffset: select.start.offset, focusOffset: startParentLength }];
-
 
         offsets[select.end.parentIndex] = 
             prevEnd[0] ? 
@@ -240,9 +256,9 @@ class selectionTest extends Component {
     
     highlightRangeHandler(text, index){
         if(!this.state.offsets[index])
-            return <p className={classes.bodyParagraph} key={`bodyP${index}key`} id={`bodyP${index}`} children={text}/>
+            return <p className={classes.bodyParagraph} key={uniqid('key-')} id={uniqid('highlight-container-')} children={text}/>
         let pBody = [];
-        const splitText = this.state.text[index].split('');
+        const splitText = this.state.text[index][0].split('');
         this.state.offsets[index].forEach((el, i, arr) => {
             const start = (arr[i-1] && arr[i-1].focusOffset) || 0;
             const highlightBegin = el.anchorOffset;
@@ -263,7 +279,7 @@ class selectionTest extends Component {
         })
         
         return(
-            <p className={classes.bodyParagraph} key={`paragraph${index}`} id={`bodyP${index}`}>
+            <p id={uniqid('highlight-container-')} className={classes.bodyParagraph} key={uniqid('key-')} >
                 {pBody}
             </p>
         )
@@ -273,9 +289,7 @@ class selectionTest extends Component {
 
         return(
             <div onMouseUp={(event) => this.selectionHandler(event)}>
-                {this.state.text.map((el, i) => {
-                    return this.highlightRangeHandler(el, i)
-                })}
+                {this.state.body}
             </div>
         );
     }
