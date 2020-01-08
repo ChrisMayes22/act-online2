@@ -1,0 +1,20 @@
+.bodyParagraph{
+    margin: 10vh 25vw;
+    font-size: 2rem;
+}
+
+.bodySpan{
+    font-size: 2rem;
+}
+
+.bodyParagraph::selection{
+    background-color: rgba(0, 217, 255, 0.37);
+}
+
+.highlight{
+    background-color: rgba(0, 217, 255, 0.753);
+}
+
+.highlight::selection{
+    background-color: rgba(0, 217, 255, 0.37);
+}
