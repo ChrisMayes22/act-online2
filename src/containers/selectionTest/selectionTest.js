@@ -64,9 +64,8 @@ class selectionTest extends Component {
         return layersArr;
     }
 
-    getUpdatedNode(node, start, end){
+    getUpdatedNode(node, start=0, end=node.length){
         //accepts string (add err checking later)
-        console.log('NODE', node)
         const left = node.slice(0, start);
         const middle = node.slice(start, end);
         const right = node.slice(end);
@@ -79,60 +78,85 @@ class selectionTest extends Component {
         return arr;
     }
 
+    insertNewJSX(newJSX, newChildren, container, ids){
+        newJSX.props = {
+            ...newJSX.props,
+            children: newChildren
+        }
+        const branchCopy = this.getJSXLayers(container, ids);
+        branchCopy[branchCopy.length-1] = newJSX;
+        const newBranch = this.getJSXFromBranchArray(branchCopy);
+        const newBody = [...this.state.body];
+        const replacedIndex = this.state.body.findIndex(el => el.props.id === ids[0]);
+        newBody[replacedIndex] = newBranch;
+        this.setState({ body: newBody });
+    }
+
     selectionHandler(e){
         e.preventDefault()
         const select = window.getSelection(e)
         const anchorBranchIds = this.getBranchIds(select.anchorNode, []);
         const focusBranchIds = this.getBranchIds(select.focusNode, []);
-        if(focusBranchIds[focusBranchIds.length-1] === anchorBranchIds[anchorBranchIds.length-1]){
+        const anchorContainerId = anchorBranchIds[0];
+        const focusContainerId = focusBranchIds[0];
+        const anchorNodeId = anchorBranchIds[anchorBranchIds.length-1];
+        const focusNodeId = focusBranchIds[focusBranchIds.length-1];
+        if(anchorContainerId === focusContainerId){
             const container = {...this.state.body.find(el => el.props.id === anchorBranchIds[0])};
-            const anchorJSX = this.getJSXNodeFromIds(anchorBranchIds, container);
-            const anchorChildren = anchorJSX.props.children;
-            let start = select.anchorOffset;
-            let end = select.focusOffset;
-            if(end < start) 
-                [start, end] = [end, start];
-            if(typeof(anchorChildren) === 'string'){
-                const arr = this.getUpdatedNode(anchorChildren, start, end)
-                const newJSX = {...anchorJSX};
-                newJSX.props = {
-                    ...anchorJSX.props,
-                    children: arr
-                }
-                const branchCopy = this.getJSXLayers(container, anchorBranchIds);
-                branchCopy[branchCopy.length-1] = newJSX;
-                const newBranch = this.getJSXFromBranchArray(branchCopy);
-                const newBody = [...this.state.body];
-                const replacedIndex = this.state.body.findIndex(el => el.props.id === anchorBranchIds[0]);
-                newBody[replacedIndex] = newBranch;
-                this.setState({ body: newBody });
-            } else if (Array.isArray(anchorChildren)){
-                if(select.focusNode === select.anchorNode){
-                    const targetNode = select.anchorNode;
-                    const targetIndex = anchorChildren.findIndex(el => el === targetNode.textContent);
-                    const left = anchorChildren.slice(0, targetIndex);
-                    const middle = this.getUpdatedNode(anchorChildren[targetIndex], start, end);
-                    const right = anchorChildren.slice(targetIndex+1)
-                    const newChildren = left.concat(middle, right);
+            if(anchorNodeId === focusNodeId){
+                const anchorJSX = this.getJSXNodeFromIds(anchorBranchIds, container);
+                const anchorChildren = anchorJSX.props.children;
+                let start = select.anchorOffset;
+                let end = select.focusOffset;
+                if(typeof(anchorChildren) === 'string'){
+                    if(end < start) 
+                        [start, end] = [end, start];
+                    const newChildren = this.getUpdatedNode(anchorChildren, start, end)
                     const newJSX = {...anchorJSX};
-                    newJSX.props = {
-                        ...anchorJSX.props,
-                        children: newChildren
+                    this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                } else if (Array.isArray(anchorChildren)){
+                    if(end < start) 
+                        [start, end] = [end, start];
+                    if(select.focusNode === select.anchorNode){
+                        const targetNode = select.anchorNode;
+                        const targetIndex = anchorChildren.findIndex(el => el === targetNode.textContent);
+                        const left = anchorChildren.slice(0, targetIndex);
+                        const middle = this.getUpdatedNode(anchorChildren[targetIndex], start, end);
+                        const right = anchorChildren.slice(targetIndex+1)
+                        const newChildren = left.concat(middle, right);
+                        const newJSX = {...anchorJSX};
+                        this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                    } else {
+                        console.log('Focus is not Anchor');
+                        const anchorIndex = anchorChildren.findIndex(el => select.anchorNode.textContent === el);
+                        const focusIndex = anchorChildren.findIndex(el => select.focusNode.textContent === el);
+                        const newAnchor = anchorChildren[anchorIndex];
+                        const newFocus = anchorChildren[focusIndex];
+                        const start = anchorIndex > focusIndex ? focusIndex : anchorIndex;
+                        const end = anchorIndex > focusIndex ? anchorIndex : focusIndex;
+                        for (let i = start+1; i < end; i++){
+                            if(!anchorChildren[i].props || (anchorChildren[i].props && !anchorChildren[i].props.id.includes('highlight-span'))){
+                                anchorChildren[i] = <span className={classes.highlight} id={uniqid('highlight-span-')} key={uniqid('key-')}>
+                                                        {anchorChildren[i]}
+                                                    </span>
+                            }
+                        }
+                        const anchorArr = anchorIndex < focusIndex  ? this.getUpdatedNode(newAnchor, select.anchorOffset).filter(el => el !== "") 
+                                                                    : this.getUpdatedNode(newAnchor, 0, select.anchorOffset).filter(el => el !== "");
+                        const focusArr = anchorIndex < focusIndex   ? this.getUpdatedNode(newFocus, 0, select.focusOffset).filter(el => el !== "")
+                                                                    : this.getUpdatedNode(newFocus, select.focusOffset).filter(el => el !== "");
+                        const left = anchorChildren.slice(0, start);
+                        const firstInsert = anchorIndex < focusIndex ? anchorArr : focusArr;
+                        const middle = anchorChildren.slice(start+1, end);
+                        const secondInsert = anchorIndex < focusIndex ? focusArr : anchorArr;
+                        const right = anchorChildren.slice(end+1);
+                        const newChildren = left.concat(firstInsert, middle, secondInsert, right);
+                        const newJSX = {...anchorJSX};
+                        this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
                     }
-                    const branchCopy = this.getJSXLayers(container, anchorBranchIds);
-                    branchCopy[branchCopy.length-1] = newJSX;
-                    const newBranch = this.getJSXFromBranchArray(branchCopy);
-                    const newBody = [...this.state.body];
-                    const replacedIndex = this.state.body.findIndex(el => el.props.id === anchorBranchIds[0]);
-                    newBody[replacedIndex] = newBranch;
-                    this.setState({ body: newBody });
                 }
             }
         }
-        const anchorContainer = {...this.state.body.find(el => el.props.id === anchorBranchIds[0])};
-        const focusContainer = {...this.state.body.find(el => el.props.id === focusBranchIds[0])};
-        const anchorJSX = this.getJSXNodeFromIds(anchorBranchIds, anchorContainer);
-        const focusJSX = this.getJSXNodeFromIds(focusBranchIds, focusContainer);
     }
 
     getJSXFromBranchArray(branchArr){
