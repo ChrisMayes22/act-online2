@@ -127,7 +127,6 @@ class selectionTest extends Component {
                         const newJSX = {...anchorJSX};
                         this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
                     } else {
-                        console.log('Focus is not Anchor');
                         const anchorIndex = anchorChildren.findIndex(el => select.anchorNode.textContent === el);
                         const focusIndex = anchorChildren.findIndex(el => select.focusNode.textContent === el);
                         const newAnchor = anchorChildren[anchorIndex];
@@ -155,7 +154,28 @@ class selectionTest extends Component {
                         this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
                     }
                 }
+            } else {
+                const anchorJSX = this.getJSXNodeFromIds(anchorBranchIds, container);
+                const focusJSX = this.getJSXNodeFromIds(focusBranchIds, container);
+                const focusId = focusJSX.props.id;
+                const anchorId = anchorJSX.props.id;
+                const parent = this.getLowestCommonParentJSX(anchorBranchIds, focusBranchIds, container);
+                console.log('PARENT', parent);
+                if(parent.props.id === focusId || parent.props.id === anchorId){
+                    const child = parent.props.id === focusId ? anchorJSX : focusJSX;
+                    console.log('FOCUS TEXT', select.focusNode.textContent);
+                    console.log('ANCHOR TEXT', select.anchorNode.textContent);
+                    console.log('CHILD', child);
+                }
+                // console.log(focusId, 'FOCUS ID')
+                // console.log(anchorId, 'ANCHOR ID')
+                // console.log('ANCHOR IDS', anchorBranchIds);
+                // console.log('FOCUS IDS', focusBranchIds);
+                // console.log('PARENT', parent);
+                // console.log('CONTAINER', container)
             }
+        } else {
+            console.log('Anchor and Focus do not share parent');
         }
     }
 
@@ -179,6 +199,51 @@ class selectionTest extends Component {
             }
         }
         return branchArr[0];
+    }
+
+    getLowestCommonParentJSX(idsOne, idsTwo, container){
+        const parentId = idsOne.map((el, i) => {
+            if(!(idsTwo.includes(el))){
+                return idsOne[i-1]
+            } else {
+                return null
+            }
+        }).filter(el => el);
+        if(!parentId[0]){
+            parentId[0] = idsTwo.map((el, i) => {
+                if(!(idsOne.includes(el))){
+                    return idsTwo[i-1]
+                } else {
+                    return null;
+                }
+            }).filter(el => el)[0];
+        }
+        let nestedLayers = idsOne.findIndex(el => el === parentId[0]);
+        let currentNode = container;
+        while(nestedLayers > 0){
+            if(currentNode.props && currentNode.props.children){
+                if(Array.isArray(currentNode.props.children)){
+                    const nextNode = currentNode.props.children.find(el => el.props && idsOne.includes(el.props.id));
+                    if(nextNode === -1){
+                        console.log('ERR: ARRAY NODE DOES NOT INCLUDE TARGET CHILD NODE');
+                        return null;
+                    }
+                    currentNode = nextNode;
+                    nestedLayers--
+                } else if(!(typeof(currentNode.props.children) === 'string')){
+                    currentNode = currentNode.props.children;
+                    nestedLayers--;
+                } else {
+                    console.log('ERR: ELEMENT IS A STRING');
+                    console.log('CURRENT NODE', currentNode);
+                    break;
+                }
+            } else {
+                console.log('ERR: ELEMENT DOES NOT HAVE CHILDREN');
+            }
+        }
+
+        return currentNode;
     }
 
     getJSXNodeFromIds(ids, container){
@@ -211,18 +276,6 @@ class selectionTest extends Component {
             console.log('WARNING: NODE WITH NO ID -- ', node)
         }
         return this.getBranchIds(node.parentNode, arr);
-    }
-
-    
-
-    getOffsetInParent(child, parent, offset){
-        let offsetFromParentStart = 0;
-            parent.childNodes.forEach(c => {
-                if(child.textContent === c.textContent)
-                    offset += offsetFromParentStart;
-                offsetFromParentStart += c.textContent.length;
-            });
-        return offset
     }
 
 
