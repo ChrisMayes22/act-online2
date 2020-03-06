@@ -24,44 +24,11 @@ class selectionTest extends Component {
                 <p className={classes.bodyParagraph} key={uniqid('key-')} id={uniqid('highlight-container-')}>
                     <span id={uniqid('span-')}>this is <em id={uniqid('em-')}>emphasized</em> text D</span>
                 </p>] 
-                //text array will be received as props in real application
     }
 
-    componentDidMount(){
-        
-        // this.expectedLengths = this.state.text.map(el => el[0].length);
-    }
 
     componentDidUpdate(){
         window.getSelection().empty();
-    }
-
-    getJSXLayers(parent, ids){
-        const layersArr = [{...parent}];
-        let currentNode = layersArr[0];
-        for(let i = 0; i < ids.length; i++){
-            if(currentNode.props){
-                const nextNode = currentNode.props.children;
-                if(Array.isArray(nextNode)){
-                    if(i === ids.length-1){
-                        layersArr.push([...nextNode]);
-                        break;
-                    }
-                    const nextIndex = nextNode.findIndex(el => el.props && el.props.id === ids[i+1]);
-                    if(!(nextIndex+1)){
-                        return null;
-                    }
-                    layersArr.push([...nextNode]);
-                    currentNode = nextNode[nextIndex];
-                } else if (!(typeof(nextNode) === 'string')){
-                    layersArr.push({...nextNode});
-                    currentNode = nextNode;
-                } else {
-                    layersArr.push(nextNode);
-                }
-            }
-        }
-        return layersArr;
     }
 
     getUpdatedNode(node, start=0, end=node.length){
@@ -83,13 +50,59 @@ class selectionTest extends Component {
             ...newJSX.props,
             children: newChildren
         }
-        const branchCopy = this.getJSXLayers(container, ids);
-        branchCopy[branchCopy.length-1] = newJSX;
-        const newBranch = this.getJSXFromBranchArray(branchCopy);
-        const newBody = [...this.state.body];
-        const replacedIndex = this.state.body.findIndex(el => el.props.id === ids[0]);
-        newBody[replacedIndex] = newBranch;
-        this.setState({ body: newBody });
+        const branchArr = [];
+        let searching = true;
+        let currentNode = container;
+        while(searching){
+            if(currentNode.props){
+                if(currentNode.props.id === newJSX.props.id){
+                    console.log('CURRENT NODE', currentNode);
+                    console.log('NEW JSX', newJSX);
+                    branchArr.push(newJSX);
+                    searching = false;
+                } else if(Array.isArray(currentNode.props.children)) {
+                    branchArr.push(currentNode);
+                    const targetIndex = currentNode.props.children.findIndex(el => el.props && ids.includes(el.props.id));
+                    currentNode = currentNode.props.children[targetIndex];
+                } else {
+                    branchArr.push(currentNode);
+                    currentNode = currentNode.props.children;
+                }
+            } else {
+                console.log('ERR: Current node does not have props.')
+                searching = false;
+            }
+        }
+        function buildChildrenRecursively(branchArr, ids){
+            if(branchArr.length === 1){
+                return branchArr[0]
+            }
+            const parent = {...branchArr[branchArr.length-2]};
+            const child = {...branchArr[branchArr.length-1]};
+            if(parent.props){
+                if(Array.isArray(parent.props.children)){
+                    const targetIndex = parent.props.children.findIndex(el => el.props && ids.includes(el.props.id));
+                    parent.props= {
+                        ...parent.props,
+                        children: [...parent.props.children]
+                    }
+                    parent.props.children[targetIndex] = child;
+                } else {
+                    console.log('PARENT', parent)
+                    parent.props = {
+                        ...parent.props,
+                        children: child
+                    }
+                    console.log('PARENT AFTER REPLACEMENT', parent);
+                }
+            } else {
+                return null;
+            }
+            branchArr[branchArr.length-2] = parent;
+            branchArr.pop();
+            return buildChildrenRecursively(branchArr, ids);
+        }
+        return buildChildrenRecursively(branchArr, ids);
     }
 
     selectionHandler(e){
@@ -113,7 +126,8 @@ class selectionTest extends Component {
                         [start, end] = [end, start];
                     const newChildren = this.getUpdatedNode(anchorChildren, start, end)
                     const newJSX = {...anchorJSX};
-                    this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                    const containerReplacement = this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                    this.updateHighlights(containerReplacement);
                 } else if (Array.isArray(anchorChildren)){
                     if(end < start) 
                         [start, end] = [end, start];
@@ -125,7 +139,8 @@ class selectionTest extends Component {
                         const right = anchorChildren.slice(targetIndex+1)
                         const newChildren = left.concat(middle, right);
                         const newJSX = {...anchorJSX};
-                        this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                        const containerReplacement = this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                        this.updateHighlights(containerReplacement);
                     } else {
                         const anchorIndex = anchorChildren.findIndex(el => select.anchorNode.textContent === el);
                         const focusIndex = anchorChildren.findIndex(el => select.focusNode.textContent === el);
@@ -151,7 +166,8 @@ class selectionTest extends Component {
                         const right = anchorChildren.slice(end+1);
                         const newChildren = left.concat(firstInsert, middle, secondInsert, right);
                         const newJSX = {...anchorJSX};
-                        this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                        const containerReplacement = this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                        this.updateHighlights(containerReplacement);
                     }
                 }
             } else {
@@ -160,12 +176,12 @@ class selectionTest extends Component {
                 const focusId = focusJSX.props.id;
                 const anchorId = anchorJSX.props.id;
                 const parent = this.getLowestCommonParentJSX(anchorBranchIds, focusBranchIds, container);
-                console.log('PARENT', parent);
                 if(parent.props.id === focusId || parent.props.id === anchorId){
                     const child = parent.props.id === focusId ? anchorJSX : focusJSX;
-                    console.log('FOCUS TEXT', select.focusNode.textContent);
-                    console.log('ANCHOR TEXT', select.anchorNode.textContent);
+                    console.log('CONTAINER', container)
+                    console.log('PARENT', parent);
                     console.log('CHILD', child);
+                    console.log('PARENT CHILDREN', parent.props.children);
                 }
                 // console.log(focusId, 'FOCUS ID')
                 // console.log(anchorId, 'ANCHOR ID')
@@ -179,27 +195,7 @@ class selectionTest extends Component {
         }
     }
 
-    getJSXFromBranchArray(branchArr){
-        for(let i = branchArr.length-1; i > 0; i--){
-            if(Array.isArray(branchArr[i-1])){
-                const targetIndex = branchArr[i-1].findIndex(el => el.props && el.props.id === branchArr[i].props.id);
-                if(!(targetIndex + 1)){
-                    console.log('ERR: ID from array not found in subsequent element');
-                    return null;
-                }
-                branchArr[i-1][targetIndex] = branchArr[i];
-            } else { 
-                branchArr[i-1] = {
-                    ...branchArr[i-1],
-                    props: {
-                        ...branchArr[i-1].props,
-                        children: branchArr[i]
-                    }
-                }
-            }
-        }
-        return branchArr[0];
-    }
+
 
     getLowestCommonParentJSX(idsOne, idsTwo, container){
         const parentId = idsOne.map((el, i) => {
@@ -278,6 +274,12 @@ class selectionTest extends Component {
         return this.getBranchIds(node.parentNode, arr);
     }
 
+    updateHighlights(newContainer){
+        const newBody = [...this.state.body];
+        const targetIndex = newBody.findIndex(el => el.props.id === newContainer.props.id);
+        newBody[targetIndex] = newContainer;
+        this.setState({ body: newBody })
+    }
 
     render(){
 
