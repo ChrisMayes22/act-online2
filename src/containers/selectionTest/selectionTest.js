@@ -56,8 +56,6 @@ class selectionTest extends Component {
         while(searching){
             if(currentNode.props){
                 if(currentNode.props.id === newJSX.props.id){
-                    console.log('CURRENT NODE', currentNode);
-                    console.log('NEW JSX', newJSX);
                     branchArr.push(newJSX);
                     searching = false;
                 } else if(Array.isArray(currentNode.props.children)) {
@@ -88,12 +86,10 @@ class selectionTest extends Component {
                     }
                     parent.props.children[targetIndex] = child;
                 } else {
-                    console.log('PARENT', parent)
                     parent.props = {
                         ...parent.props,
                         children: child
                     }
-                    console.log('PARENT AFTER REPLACEMENT', parent);
                 }
             } else {
                 return null;
@@ -176,13 +172,31 @@ class selectionTest extends Component {
                 const focusId = focusJSX.props.id;
                 const anchorId = anchorJSX.props.id;
                 const parent = this.getLowestCommonParentJSX(anchorBranchIds, focusBranchIds, container);
-                if(parent.props.id === focusId || parent.props.id === anchorId){
-                    const child = parent.props.id === focusId ? anchorJSX : focusJSX;
-                    console.log('CONTAINER', container)
-                    console.log('PARENT', parent);
-                    console.log('CHILD', child);
-                    console.log('PARENT CHILDREN', parent.props.children);
-                }
+                const parentText = this.getTextFromJSX(parent);
+                const anchorText = this.getTextFromJSX(anchorJSX);
+                const focusText = this.getTextFromJSX(focusJSX);
+                console.log('PARENT TEXT', parentText);
+                console.log('ANCHOR TEXT', select.anchorNode.textContent);
+                console.log('FOCUS TEXT', select.focusNode.textContent);
+                // if(parent.props.id === focusId || parent.props.id === anchorId){
+                //     const child = parent.props.id === focusId ? anchorJSX : focusJSX;
+                //     const childText = this.getTextFromJSX(child);
+                //     const childIndex = parentText.indexOf(childText);
+                //     const anchorIndex = parentText.indexOf(select.anchorNode.textContent);
+                //     const focusIndex = parentText.indexOf(select.focusNode.textContent);
+                //     console.log('PARENT TEXT', parentText);
+                //     console.log('CHILD TEXT', childText);
+                //     console.log('CHILD INDEX', childIndex);
+                //     console.log('ANCHOR INDEX', anchorIndex);
+                //     console.log('FOCUS INDEX', focusIndex);
+                //     if(typeof(child.props.children) === 'string'){
+                //         console.log('CHILD IS STRING');
+                //         console.log('SELECT.ANCHOR', select.anchorNode);
+                //         console.log('SELECT.FOCUS', select.focusNode);
+                //         console.log('CHILD', child);
+                //         console.log('PARENT', parent);
+                //     }
+                // }
                 // console.log(focusId, 'FOCUS ID')
                 // console.log(anchorId, 'ANCHOR ID')
                 // console.log('ANCHOR IDS', anchorBranchIds);
@@ -195,6 +209,32 @@ class selectionTest extends Component {
         }
     }
 
+    getTextFromJSX(JSX){
+        const outputArr = [];
+        if(JSX.props){
+            if(Array.isArray(JSX.props.children)){
+                JSX.props.children.forEach(el => {
+                    if(typeof(el) === 'string'){
+                        outputArr.push(el);
+                    } else {
+                        console.log('Recursion called in getTextFromJSX');
+                        const child = this.getTextFromJSX(el);
+                        outputArr.push(child);
+                    }
+                })
+            } else if (!(typeof(JSX.props.children) === 'string')) {
+                console.log('Recursion called in getTextFromJSX');
+                const child = this.getTextFromJSX(JSX.props.children);
+                outputArr.push(child);
+            } else {
+                outputArr.push(JSX.props.children);
+            }
+        } else if(typeof(JSX) === 'string') {
+            outputArr.push(JSX);
+        }
+        const output = outputArr.join(' ');
+        return output;
+    }
 
 
     getLowestCommonParentJSX(idsOne, idsTwo, container){
