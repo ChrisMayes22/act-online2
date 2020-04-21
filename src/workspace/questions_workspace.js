@@ -20,7 +20,7 @@ class Question {
 new Question(
     11,
     <PassageTwo/>,
-    ``,
+    `What is SMART`,
     <span>A.</span>,
     <span>B.</span>,
     <span>C.</span>,
