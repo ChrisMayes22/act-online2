@@ -155,3 +155,5 @@ const questionsArray = [
 
 
 export default questionsArray;
+
+var add = 'add';
