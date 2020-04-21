@@ -11,7 +11,6 @@ class selectionTest extends Component {
     }
 
     state = {
-        offsets: [],
         body: [<p className={classes.bodyParagraph} key={uniqid('key-')} id={uniqid('highlight-container-')}>
                     <span id={uniqid('span-')}>this is not emphasized text A</span>
                 </p>,
@@ -26,10 +25,166 @@ class selectionTest extends Component {
                 </p>] 
     }
 
-
     componentDidUpdate(){
         window.getSelection().empty();
     }
+
+    selectionHandler(e){
+        /* Handles data recieved from upClick even using window.getSelection*/
+        e.preventDefault()
+        const select = window.getSelection(e)
+        const anchorBranchIds = this.getBranchIds(select.anchorNode, []);
+        const focusBranchIds = this.getBranchIds(select.focusNode, []);
+        const anchorContainerId = anchorBranchIds[0];
+        const focusContainerId = focusBranchIds[0];
+        const anchorNodeId = anchorBranchIds[anchorBranchIds.length-1];
+        const focusNodeId = focusBranchIds[focusBranchIds.length-1];
+        if(anchorContainerId === focusContainerId){
+            const container = {...this.state.body.find(el => el.props.id === anchorBranchIds[0])};
+
+            if(anchorNodeId === focusNodeId){
+                const targetNodeData = {
+                    JSX: this.getJSXFromIds(anchorBranchIds, container),
+                    start: select.anchorOffset,
+                    end: select.focusOffset
+                }
+                const anchorJSX = this.getJSXFromIds(anchorBranchIds, container);
+                const anchorChildren = anchorJSX.props.children;
+                let start = select.anchorOffset;
+                let end = select.focusOffset;
+                if(typeof(anchorChildren) === 'string'){
+                    if(end < start) 
+                        [start, end] = [end, start];
+                    const newChildren = this.getUpdatedNode(anchorChildren, start, end)
+                    const newJSX = {...anchorJSX};
+                    const containerReplacement = this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                    this.updateHighlights(containerReplacement);
+
+                } else if (Array.isArray(anchorChildren)){
+                    if(end < start) 
+                        [start, end] = [end, start];
+                    if(select.focusNode === select.anchorNode){
+                        const targetNode = select.anchorNode;
+                        const targetIndex = anchorChildren.findIndex(el => el === targetNode.textContent);
+                        const left = anchorChildren.slice(0, targetIndex);
+                        const middle = this.getUpdatedNode(anchorChildren[targetIndex], start, end);
+                        const right = anchorChildren.slice(targetIndex+1)
+                        const newChildren = left.concat(middle, right);
+                        const newJSX = {...anchorJSX};
+                        const containerReplacement = this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                        this.updateHighlights(containerReplacement);
+
+                    } else {
+                        const anchorIndex = anchorChildren.findIndex(el => select.anchorNode.textContent === el);
+                        const focusIndex = anchorChildren.findIndex(el => select.focusNode.textContent === el);
+                        const newAnchor = anchorChildren[anchorIndex];
+                        const newFocus = anchorChildren[focusIndex];
+                        const start = anchorIndex > focusIndex ? focusIndex : anchorIndex;
+                        const end = anchorIndex > focusIndex ? anchorIndex : focusIndex;
+                        const anchorChildrenCopy = [...anchorChildren]
+                        for (let i = start+1; i < end; i++){
+                            if(!anchorChildrenCopy[i].props || (anchorChildrenCopy[i].props && !anchorChildrenCopy[i].props.id.includes('highlight-span'))){
+                                anchorChildrenCopy[i] = <span className={classes.highlight} id={uniqid('highlight-span-')} key={uniqid('key-')}>
+                                                        {anchorChildrenCopy[i]}
+                                                    </span>
+                            }
+                        }
+                        const anchorArr = anchorIndex < focusIndex  ? this.getUpdatedNode(newAnchor, select.anchorOffset).filter(el => el !== "") 
+                                                                    : this.getUpdatedNode(newAnchor, 0, select.anchorOffset).filter(el => el !== "");
+                        const focusArr = anchorIndex < focusIndex   ? this.getUpdatedNode(newFocus, 0, select.focusOffset).filter(el => el !== "")
+                                                                    : this.getUpdatedNode(newFocus, select.focusOffset).filter(el => el !== "");
+                        const left = anchorChildrenCopy.slice(0, start);
+                        const firstInsert = anchorIndex < focusIndex ? anchorArr : focusArr;
+                        const middle = anchorChildrenCopy.slice(start+1, end);
+                        const secondInsert = anchorIndex < focusIndex ? focusArr : anchorArr;
+                        const right = anchorChildrenCopy.slice(end+1);
+                        const newChildren = left.concat(firstInsert, middle, secondInsert, right);
+                        const newJSX = {...anchorJSX};
+                        const containerReplacement = this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
+                        this.updateHighlights(containerReplacement);
+
+                    }
+                }
+            } else {
+                const anchorJSX = this.getJSXFromIds(anchorBranchIds, container);
+                const focusJSX = this.getJSXFromIds(focusBranchIds, container);
+                const parent = this.getLowestCommonParentJSX(anchorBranchIds, focusBranchIds, container);
+                const parentText = this.getTextFromJSX(parent);
+                const anchorIndex = parentText.indexOf(select.anchorNode.textContent);
+                const focusIndex = parentText.indexOf(select.focusNode.textContent);
+                const startObject = {
+                    JSX: anchorIndex < focusIndex ? anchorJSX : focusJSX,
+                    node: anchorIndex < focusIndex ? select.anchorNode : select.focusNode,
+                    offset: anchorIndex < focusIndex ? select.anchorOffset : select.focusOffset
+                };
+                const endObject = {
+                    JSX: anchorIndex < focusIndex ? focusJSX : anchorJSX,
+                    node: anchorIndex < focusIndex ? select.focusNode : select.anchorNode,
+                    offset: anchorIndex < focusIndex ? select.focusOffset : select.anchorOffset
+                };
+                const ids = {
+                    startIds: anchorIndex < focusIndex ? anchorBranchIds : focusBranchIds,
+                    endIds: anchorIndex < focusIndex ? focusBranchIds : anchorBranchIds
+                }
+
+                const newParent = this.highlightBetweenNodes(startObject, endObject, parent, ids);
+                const newContainer = this.insertNewJSX({
+                    ...parent}, 
+                    newParent.props.children, 
+                    container, 
+                    anchorIndex < focusIndex ? focusBranchIds : anchorBranchIds); // Probably want to refactor to differentiate between Ids. Diagram this out.
+                this.updateHighlights(newContainer);
+
+                // if(parent.props.id === focusId || parent.props.id === anchorId){
+                //     const child = parent.props.id === focusId ? anchorJSX : focusJSX;
+                //     const childText = this.getTextFromJSX(child);
+                //     const childIndex = parentText.indexOf(childText);
+                //     const anchorIndex = parentText.indexOf(select.anchorNode.textContent);
+                //     const focusIndex = parentText.indexOf(select.focusNode.textContent);
+                //     console.log('PARENT TEXT', parentText);
+                //     console.log('CHILD TEXT', childText);
+                //     console.log('CHILD INDEX', childIndex);
+                //     console.log('ANCHOR INDEX', anchorIndex);
+                //     console.log('FOCUS INDEX', focusIndex);
+                //     if(typeof(child.props.children) === 'string'){
+                //         console.log('CHILD IS STRING');
+                //         console.log('SELECT.ANCHOR', select.anchorNode);
+                //         console.log('SELECT.FOCUS', select.focusNode);
+                //         console.log('CHILD', child);
+                //         console.log('PARENT', parent);
+                //     }
+                // }
+                // console.log(focusId, 'FOCUS ID')
+                // console.log(anchorId, 'ANCHOR ID')
+                // console.log('ANCHOR IDS', anchorBranchIds);
+                // console.log('FOCUS IDS', focusBranchIds);
+                // console.log('PARENT', parent);
+                // console.log('CONTAINER', container)
+            }
+        } else {
+            console.log('Anchor and Focus do not share parent');
+        }
+    }
+
+
+    getJSXFromIds(ids, container){ 
+        /* Takes an array of ids and a container. 
+        Returns JSX object associated with the LAST id in ids. */
+        if(container.props.id === ids[ids.length-1]){ 
+            return container;
+        }
+        let currentNode = container;
+        for(let i = 1; i < ids.length; i++){
+            const children = currentNode.props.children
+            if(Array.isArray(children)){
+                currentNode = children.find(child => { return child.props && child.props.id === ids[i] }) 
+            } else {
+                currentNode = children;
+            }
+        }
+        return currentNode;
+    }
+
 
     getUpdatedNode(node, start=0, end=node.length){
         //accepts string (add err checking later)
@@ -102,132 +257,7 @@ class selectionTest extends Component {
         return buildChildrenRecursively(branchArr, ids);
     }
 
-    selectionHandler(e){
-        e.preventDefault()
-        const select = window.getSelection(e)
-        const anchorBranchIds = this.getBranchIds(select.anchorNode, []);
-        const focusBranchIds = this.getBranchIds(select.focusNode, []);
-        const anchorContainerId = anchorBranchIds[0];
-        const focusContainerId = focusBranchIds[0];
-        const anchorNodeId = anchorBranchIds[anchorBranchIds.length-1];
-        const focusNodeId = focusBranchIds[focusBranchIds.length-1];
-        if(anchorContainerId === focusContainerId){
-            const container = {...this.state.body.find(el => el.props.id === anchorBranchIds[0])};
-            if(anchorNodeId === focusNodeId){
-                const anchorJSX = this.getJSXFromIds(anchorBranchIds, container);
-                const anchorChildren = anchorJSX.props.children;
-                let start = select.anchorOffset;
-                let end = select.focusOffset;
-                if(typeof(anchorChildren) === 'string'){
-                    if(end < start) 
-                        [start, end] = [end, start];
-                    const newChildren = this.getUpdatedNode(anchorChildren, start, end)
-                    const newJSX = {...anchorJSX};
-                    const containerReplacement = this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
-                    this.updateHighlights(containerReplacement);
-                } else if (Array.isArray(anchorChildren)){
-                    if(end < start) 
-                        [start, end] = [end, start];
-                    if(select.focusNode === select.anchorNode){
-                        const targetNode = select.anchorNode;
-                        const targetIndex = anchorChildren.findIndex(el => el === targetNode.textContent);
-                        const left = anchorChildren.slice(0, targetIndex);
-                        const middle = this.getUpdatedNode(anchorChildren[targetIndex], start, end);
-                        const right = anchorChildren.slice(targetIndex+1)
-                        const newChildren = left.concat(middle, right);
-                        const newJSX = {...anchorJSX};
-                        const containerReplacement = this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
-                        this.updateHighlights(containerReplacement);
-                    } else {
-                        const anchorIndex = anchorChildren.findIndex(el => select.anchorNode.textContent === el);
-                        const focusIndex = anchorChildren.findIndex(el => select.focusNode.textContent === el);
-                        const newAnchor = anchorChildren[anchorIndex];
-                        const newFocus = anchorChildren[focusIndex];
-                        const start = anchorIndex > focusIndex ? focusIndex : anchorIndex;
-                        const end = anchorIndex > focusIndex ? anchorIndex : focusIndex;
-                        const anchorChildrenCopy = [...anchorChildren]
-                        for (let i = start+1; i < end; i++){
-                            if(!anchorChildrenCopy[i].props || (anchorChildrenCopy[i].props && !anchorChildrenCopy[i].props.id.includes('highlight-span'))){
-                                anchorChildrenCopy[i] = <span className={classes.highlight} id={uniqid('highlight-span-')} key={uniqid('key-')}>
-                                                        {anchorChildrenCopy[i]}
-                                                    </span>
-                            }
-                        }
-                        const anchorArr = anchorIndex < focusIndex  ? this.getUpdatedNode(newAnchor, select.anchorOffset).filter(el => el !== "") 
-                                                                    : this.getUpdatedNode(newAnchor, 0, select.anchorOffset).filter(el => el !== "");
-                        const focusArr = anchorIndex < focusIndex   ? this.getUpdatedNode(newFocus, 0, select.focusOffset).filter(el => el !== "")
-                                                                    : this.getUpdatedNode(newFocus, select.focusOffset).filter(el => el !== "");
-                        const left = anchorChildrenCopy.slice(0, start);
-                        const firstInsert = anchorIndex < focusIndex ? anchorArr : focusArr;
-                        const middle = anchorChildrenCopy.slice(start+1, end);
-                        const secondInsert = anchorIndex < focusIndex ? focusArr : anchorArr;
-                        const right = anchorChildrenCopy.slice(end+1);
-                        const newChildren = left.concat(firstInsert, middle, secondInsert, right);
-                        const newJSX = {...anchorJSX};
-                        const containerReplacement = this.insertNewJSX(newJSX, newChildren, container, anchorBranchIds);
-                        this.updateHighlights(containerReplacement);
-                    }
-                }
-            } else {
-                const anchorJSX = this.getJSXFromIds(anchorBranchIds, container);
-                const focusJSX = this.getJSXFromIds(focusBranchIds, container);
-                const parent = this.getLowestCommonParentJSX(anchorBranchIds, focusBranchIds, container);
-                const parentText = this.getTextFromJSX(parent);
-                const anchorIndex = parentText.indexOf(select.anchorNode.textContent);
-                const focusIndex = parentText.indexOf(select.focusNode.textContent);
-                const startObject = {
-                    JSX: anchorIndex < focusIndex ? anchorJSX : focusJSX,
-                    node: anchorIndex < focusIndex ? select.anchorNode : select.focusNode,
-                    offset: anchorIndex < focusIndex ? select.anchorOffset : select.focusOffset
-                };
-                const endObject = {
-                    JSX: anchorIndex < focusIndex ? focusJSX : anchorJSX,
-                    node: anchorIndex < focusIndex ? select.focusNode : select.anchorNode,
-                    offset: anchorIndex < focusIndex ? select.focusOffset : select.anchorOffset
-                };
-                const ids = {
-                    startIds: anchorIndex < focusIndex ? anchorBranchIds : focusBranchIds,
-                    endIds: anchorIndex < focusIndex ? focusBranchIds : anchorBranchIds
-                }
-
-                const newParent = this.highlightBetweenNodes(startObject, endObject, parent, ids);
-                const newContainer = this.insertNewJSX({
-                    ...parent}, 
-                    newParent.props.children, 
-                    container, 
-                    anchorIndex < focusIndex ? focusBranchIds : anchorBranchIds); // Probably want to refactor to differentiate between Ids. Diagram this out.
-                this.updateHighlights(newContainer);
-
-                // if(parent.props.id === focusId || parent.props.id === anchorId){
-                //     const child = parent.props.id === focusId ? anchorJSX : focusJSX;
-                //     const childText = this.getTextFromJSX(child);
-                //     const childIndex = parentText.indexOf(childText);
-                //     const anchorIndex = parentText.indexOf(select.anchorNode.textContent);
-                //     const focusIndex = parentText.indexOf(select.focusNode.textContent);
-                //     console.log('PARENT TEXT', parentText);
-                //     console.log('CHILD TEXT', childText);
-                //     console.log('CHILD INDEX', childIndex);
-                //     console.log('ANCHOR INDEX', anchorIndex);
-                //     console.log('FOCUS INDEX', focusIndex);
-                //     if(typeof(child.props.children) === 'string'){
-                //         console.log('CHILD IS STRING');
-                //         console.log('SELECT.ANCHOR', select.anchorNode);
-                //         console.log('SELECT.FOCUS', select.focusNode);
-                //         console.log('CHILD', child);
-                //         console.log('PARENT', parent);
-                //     }
-                // }
-                // console.log(focusId, 'FOCUS ID')
-                // console.log(anchorId, 'ANCHOR ID')
-                // console.log('ANCHOR IDS', anchorBranchIds);
-                // console.log('FOCUS IDS', focusBranchIds);
-                // console.log('PARENT', parent);
-                // console.log('CONTAINER', container)
-            }
-        } else {
-            console.log('Anchor and Focus do not share parent');
-        }
-    }
+    
 
     highlightBetweenNodes(start, end, parent, ids){
         const updatedStart = this.getUpdatedNode(start.node.textContent, start.offset).filter(el => el !== "");
@@ -282,8 +312,8 @@ class selectionTest extends Component {
             const newChildren = [parent.props.children[startIndex]];
             for(let i = startIndex + 1; i < endIndex; i++){
                 const newChild = <span className={classes.highlight} id={uniqid('highlight-span-')} key={uniqid('key-')}>
-                    {parent.props.children[i]}
-                </span>;
+                                    {parent.props.children[i]}
+                                </span>;
                 newChildren.push(newChild);
             }
             newChildren.push(parent.props.children[endIndex]);
@@ -376,21 +406,7 @@ class selectionTest extends Component {
         return currentNode;
     }
 
-    getJSXFromIds(ids, container){
-        if(container.props.id === ids[ids.length-1]){
-            return container;
-        }
-        let currentNode = container;
-        ids.forEach((el, i) => {
-            if(!i)
-                return;
-            const ch = currentNode.props.children
-            currentNode = Array.isArray(ch) ? ch.find(child => { 
-                return child.props && child.props.id === el }) : ch
-        })
-        return currentNode;
-    }
-
+    
     getBranchIds(node, arr){
         if(!node){
             console.log('WARNING! no parent for targeted element found.')
@@ -407,6 +423,7 @@ class selectionTest extends Component {
         }
         return this.getBranchIds(node.parentNode, arr);
     }
+
 
     updateHighlights(newContainer){
         const newBody = [...this.state.body];

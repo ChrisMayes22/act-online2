@@ -12,7 +12,7 @@ const passageOne = () => {
               <em>Deicers</em> (mixtures of salt and water that are used on roads to melt ice) can over time cause concrete pavement to deteriorate.
             </p>
             <p>
-              Two studies examined how 4 different deicers affected the length, mass, and compressive strength (CS) of identical cylinders made of 
+              Two <u>studies</u> examined how 4 different deicers affected the length, mass, and compressive strength (CS) of identical cylinders made of 
               hardened concrete. (CS is the maximum lengthwise pressure that can be applied to the ends of a cylinder without crushing it.) Each 
               deicer was 15% by mass of Ca(OH)<sub>2</sub>, NaCl, MgCl<sub>2</sub>, or CaCl kept at 4°C<sub>2</sub>.
             </p>
